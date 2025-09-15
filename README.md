@@ -1,3 +1,5 @@
-# CMSC-447-team-9-Visa-Dashboard-Project
+# Visa-Dashboard-Project
+
+Authors: Colin Stokes, Chujia Guo, Brayden Rosling, Sabeeh Safdar
 
 Initial Commit
