@@ -16,10 +16,11 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body
-                className={`w-100vh h-screen`}>
-                    <Navigation/>
-                {children}
+            <body className={`flex flex-row h-screen`}>
+                <Navigation />
+                <main className="flex-1 p-4">
+                    {children}
+                </main>
             </body>
         </html>
     );
