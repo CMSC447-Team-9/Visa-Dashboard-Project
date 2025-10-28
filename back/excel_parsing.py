@@ -21,7 +21,7 @@ def current_visas(excel):
     mask = excel_sorted["clean exp date"].map(type) == str
     excel_sorted.loc[mask, "clean exp date"] = (excel_sorted.loc[mask, "clean exp date"].str.extract(r'(\d{1,2}[/]\d{1,2}[/]\d{2,4})')[0])
     excel_sorted["clean exp date"] = pd.to_datetime(excel_sorted["clean exp date"], errors='coerce')
-    excel_sorted = excel_sorted[excel_sorted["clean exp date"] >= today]
+    excel_sorted = excel_sorted[(excel_sorted["clean exp date"].isna()) | (excel_sorted["clean exp date"] >= today)]
     return excel_sorted
 
 
@@ -33,7 +33,13 @@ def visas_to_renew(excel):
     for _, row in excel.iterrows():
         if "done" in str(row["Expiration Date"]):
             continue
-
+        if pd.isna(row["clean exp date"]):
+            renew_list.append({
+                "Last name": row["Last name"],
+                "First name": row["First Name"],
+                "Case type": row["Case type"],
+                "Expiration date": "Unknown",
+            })
         case_type = str(row["Case type"])
         if ("H-1B" in case_type) or ("J-1" in case_type):
             if((row["clean exp date"] - today).days <= 180):
