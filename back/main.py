@@ -4,5 +4,13 @@ if __name__ == '__main__':
     print("Hello World")
     excel = excel_parsing.get_excel()
     sorted_excel = excel_parsing.current_visas(excel)
-    print(sorted_excel.to_string)
-    #print(excel.columns.tolist)
+    renew_list = excel_parsing.visas_to_renew(sorted_excel)
+    with open("parsed_sheet_data.txt",'w') as f:
+        f.write("First name,Last name,Case type,Expiration date\n")
+        for record in renew_list:
+            f.write(
+                f"{record['First name']},{record['Last name']},"
+                f"{record['Case type']},{record['Expiration date']}\n"
+            )
+    
+
