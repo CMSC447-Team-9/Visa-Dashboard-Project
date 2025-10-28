@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import { LucideIcon, Menu, ChevronLeft, LogOut, Home, FileText } from "lucide-react"
 
@@ -16,31 +16,50 @@ type NavButton = {
 // Groups of buttons for specific pages
 const groups: Record<string, NavButton[]> = {
     dashboard: [
-        { name: "Home", href: "/dashboard/home", icon: Home },
+        { name: "Home", href: "/dashboard", icon: Home },
         { name: "Reports", href: "/dashboard/reports", icon: FileText },
     ]
 }
 
 // Classes for buttons
-const buttonClass: string = "flex flex-row w-full h-10 pl-1 gap-4 items-center hover:bg-[#c7c8ca] rounded transition-all duration-300"
+const buttonClass: string = "flex w-full h-10 items-center hover:bg-[#c7c8ca] rounded transition-all duration-300"
 
 export default function Navigation() {
-    const [isOpen, setOpen] = useState(true)
+    const [isOpen, setOpen] = useState(false)
     const pathname = usePathname()
+    const router = useRouter()
 
     // Select group based off path
     let activeGroup: NavButton[] = []
     if (pathname.startsWith("/dashboard")) activeGroup = groups.dashboard
 
+
+    // Logout and clear cookies
+    const handleLogout = async () => {
+        setOpen(false)
+        try {
+            const res = await fetch("/api/logout", { method: "POST" });
+            if (res.ok) {
+                router.push("/")
+            }
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
     return (
         <div className="flex min-h-screen">
-            <div className={`flex flex-col bg-[#636466] text-white transition-all duration-100 ease-in-out ${isOpen ? "w-48" : "w-16"}`}>
+            <div className={`flex flex-col bg-[#636466] text-white transition-all duration-300 ease-in-out ${isOpen ? "w-48" : "w-16"}`}>
                 <nav className="flex flex-col h-full p-4 gap-4 items-center">
 
                     {/* Menu Header */}
                     <button className={buttonClass} onClick={() => setOpen(!isOpen)}>
-                        {isOpen ? <ChevronLeft className="flex-shrink-0" /> : <Menu className="flex-shrink-0" />}
-                        {isOpen && <span>Menu</span>}
+                        <div className={`flex-shrink-0 flex items-center transition-all duration-300 ${isOpen ? "justify-start w-10 pl-2" : "justify-center w-full"}`}>
+                            {isOpen ? <ChevronLeft /> : <Menu />}
+                        </div>
+                        <span className={`transition-all duration-300 overflow-hidden whitespace-nowrap ${isOpen ? "opacity-100 w-auto ml-2" : "opacity-0 w-0"}`}>
+                            Menu
+                        </span>
                     </button>
 
                     {/* Active Buttons */}
@@ -48,16 +67,24 @@ export default function Navigation() {
                         const Icon = btn.icon
                         return (
                             <Link className={buttonClass} key={btn.name} href={btn.href}>
-                                <Icon className="flex-shrink-0 w-5 h-5" />
-                                {isOpen && <span>{btn.name}</span>}
+                                <div className={`flex-shrink-0 flex items-center transition-all duration-300 ${isOpen ? "justify-start w-10 pl-2" : "justify-center w-full"}`}>
+                                    <Icon />
+                                </div>
+                                <span className={`transition-all duration-300 overflow-hidden whitespace-nowrap ${isOpen ? "opacity-100 w-auto ml-2" : "opacity-0 w-0"}`}>
+                                    {btn.name}
+                                </span>
                             </Link>
                         );
                     })}
 
                     {/* Exit Button */}
-                    <button className={`mt-auto ${buttonClass}`}>
-                        <LogOut className="flex-shrink-0 scale-x-[-1]" />
-                        {isOpen && <span>Exit</span>}
+                    <button className={`mt-auto ${buttonClass}`} onClick={handleLogout}>
+                        <div className={`flex-shrink-0 flex items-center transition-all duration-300 ${isOpen ? "justify-start w-10 pl-2" : "justify-center w-full"}`}>
+                            <LogOut />
+                        </div>
+                        <span className={`transition-all duration-300 overflow-hidden whitespace-nowrap ${isOpen ? "opacity-100 w-auto ml-2" : "opacity-0 w-0"}`}>
+                            Exit
+                        </span>
                     </button>
                 </nav>
             </div>
