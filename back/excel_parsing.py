@@ -2,7 +2,7 @@ import pandas as pd
 
 # returns excel sheet parsed by pandas
 def get_excel():
-    excel = pd.read_excel("Case tracking for CS class.xlsx")
+    excel = pd.read_excel("Case tracking for CS class(updated).xlsx")
     mask = excel["Start date"].map(type) == str
     excel.loc[mask, "Start date"] = (excel.loc[mask, "Start date"].str.extract(r'(\d{1,2}[/]\d{1,2}[/]\d{2,4})')[0])
     excel["Start date"] = pd.to_datetime(excel["Start date"], errors='coerce')
@@ -11,8 +11,8 @@ def get_excel():
 
 # returns a DataFrame that contains only the live cases
 def current_visas(excel):
-    #excel: dataframe of full excel sheet
-    #returns dataframe of excel sheet with only everyones current visas
+    # excel: DataFrame of full excel sheet
+    # returns DataFrame of excel sheet with only everyones current visas
     excel_sorted = excel.sort_values(by="Start date", ascending=False)
     today = pd.Timestamp.today().normalize()
     excel_sorted = excel_sorted[excel_sorted["Start date"] < today]
@@ -25,9 +25,10 @@ def current_visas(excel):
     return excel_sorted
 
 
+# returns list of dictionaries containing necessary info on all people whos visas are close to expiring
 def visas_to_renew(excel):
-    #excel: dataframe of sorted excel sheet containing only current visas
-    #returns list of dictionaries containing info on all people whos visas are up for renewal
+    # excel: DataFrame of sorted excel sheet containing only current visas
+    # returns list of dictionaries containing info on all people whos visas are up for renewal
     today = pd.Timestamp.today().normalize()
     renew_list = []
     for _, row in excel.iterrows():
@@ -97,3 +98,49 @@ def get_case_type_totals(filtered_sheet):
 
     # return tuple with totals for each case type
     return (f1_count, j1_count, h1b_count, pr_count)
+
+
+# returns an array of dictionaries representing all employee records
+def get_employee_records():
+    # load excel sheet into a pandas DataFrame
+    df = pd.read_excel("Case tracking for CS class(updated).xlsx")
+    employee_records = [] # create array to store dictionaries that representing employee records
+
+    # iterate through all rows in df and create a dictionary for each row
+    for _, row in df.iterrows():
+        # each row in the sheet creates a dictionary that represents the employee record
+        record = {
+            "lastName":                 str(row.get("Last name", "")).strip(),
+            "firstName":                str(row.get("First Name", "")).strip(),
+            "employeeUmbcEmail":        str(row.get("Employee's UMBC email", "")).strip(),
+            "personalEmail":            str(row.get("Personal email", "")).strip(),
+            "filedBy":                  str(row.get("Filed by", "")).strip(),
+            "countryOfBirth":           str(row.get("Country of Birth", "")).strip(),
+            "allCitizenships":          str(row.get("All Citizenships", "")).strip(),
+            "gender":                   str(row.get("Gender", "")).strip(),
+            "caseType":                 str(row.get("Case type", "")).strip(),
+            "permanentResidencyNotes":  str(row.get("Permanent residency notes", "")).strip(),
+            "dependents":               str(row.get("Dependents", "")).strip(),
+            "initialH1bStart":          str(row.get("initial H-1B start", "")).strip(),
+            "startDate":                str(row.get("Start date", "")).strip(),
+            "expirationDate":           str(row.get("Expiration Date", "")).strip(),
+            "prepExtensionDate":        str(row.get("Prep extension date", "")).strip(),
+            "maxHPeriod":               str(row.get("Max H period", "")).strip(),
+            "documentExpiryI94":        str(row.get("Document Expiry I-94", "")).strip(),
+            "generalNotes":             str(row.get("General notes", "")).strip(),
+            "socCode":                  str(row.get("soc code", "")).strip(),
+            "socCodeDescription":       str(row.get("soc code description", "")).strip(),
+            "department":               str(row.get("Department", "")).strip(),
+            "employeeTitle":            str(row.get("Employee Title", "")).strip(),
+            "departmentAdmin":          str(row.get("Department Admin", "")).strip(),
+            "departmentAdvisorPiChair": str(row.get("Department Advisor/PI/chair", "")).strip(),
+            "annualSalary":             str(row.get("Annual Salary", "")).strip(),
+            "employeeEducationalLevel": str(row.get("Employee Educational  Level", "")).strip(),
+            "employeeEducationalField": str(row.get("Employee Educational Field", "")).strip(),
+        }
+        
+        # add employee record dictionary to array of employee records
+        employee_records.append(record)
+
+    # return array of all employee records
+    return employee_records
