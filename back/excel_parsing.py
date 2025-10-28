@@ -60,3 +60,94 @@ def visas_to_renew(excel):
     return renew_list
 
 
+# returns total number of live cases
+# must pass in pre-processed DataFrame that only includes all live cases (done by current_visas function)
+def get_total_live_cases(filtered_sheet):
+    return len(filtered_sheet)
+
+
+# returns a tuple representing the total for each case type given a pre-processed DataFrame with only active cases
+# this function will only work properly if it's given a DataFrame that only includes active cases (done by current_visas function)
+def get_case_type_totals(filtered_sheet):
+    f1_count = 0 # total F-1 cases
+    j1_count = 0 # total J-1 cases
+    h1b_count = 0 # total H-1B cases
+    pr_count = 0 # total PR cases
+
+    # iterate through all cases in sheet
+    for case in filtered_sheet["Case type"]:
+        # skip this case if "Case type" field is missing
+        if pd.isna(case):
+            continue
+
+        # convert case type to string and remove whitespace and uppercase characters
+        case_string = str(case).strip().lower()
+
+        # increment counts of respective case types
+        if case_string.startswith("f-1"):
+            f1_count += 1
+        elif case_string.startswith("j-1"):
+            j1_count += 1
+        elif case_string.startswith("h-1b"):
+            h1b_count += 1
+        elif case_string.startswith("permanent"):
+            pr_count += 1
+
+    # return tuple with totals for each case type
+    return (f1_count, j1_count, h1b_count, pr_count)
+
+
+
+def get_report_stats(sorted_excel, excel):
+    #params: sorted_excel - sorted excel sheet of only current live cases, excel- excel sheet with start dates in datetime and 
+    #returns dictionary of statistics
+    stats = {"Male" : 0, "Female" : 0, "Unknown Department" : 0, "Unknown Gender" : 0}
+    for _, row in sorted_excel.iterrows():
+        unknown_gender = False
+        unknown_department = False
+        if(pd.notna(row["Gender"])):
+            gender = row["Gender"].strip().lower()
+            if(gender == "m" or gender == "male"):
+                stats["Male"] = stats["Male"] + 1
+            elif(gender == "f" or gender == "female"):
+                stats["Female"] = stats["Female"] + 1
+        else:
+            unknown_gender = True
+        if(pd.notna(row["Department"])):
+            department = row["Department"].strip()
+            if department in stats:
+                stats[department] = stats[department] + 1
+            else:
+                stats[department] = 1
+        else:
+            unknown_department = True
+        
+
+        #if gender or department column was empty in sorted_excel will check the excel for other rows belonging to the person
+        if(unknown_department or unknown_gender):
+            person_rows = excel[(excel["Last name"] == row["Last name"]) & (excel["First Name"] == row["First Name"])].copy()
+            person_rows = person_rows.sort_values("Start date", ascending = False)
+            for _, person_row in person_rows.iterrows():
+                if(unknown_department):
+                    if(pd.notna(person_row["Department"])):
+                        unknown_department = False
+                        department = person_row["Department"].strip()
+                        if department in stats:
+                            stats[department] = stats[department] + 1
+                        else:
+                            stats[department] = 1
+                if(unknown_gender):
+                    if(pd.notna(person_row["Gender"])):
+                        unknown_gender = False
+                        gender = person_row["Gender"].strip().lower()
+                        if(gender == "m" or gender == "male"):
+                            stats["Male"] = stats["Male"] + 1
+                        elif(gender == "f" or gender == "female"):
+                            stats["Female"] = stats["Female"] + 1
+                if not unknown_department and not unknown_gender:
+                    break
+            if(unknown_department):
+                stats["Unknown Department"] = stats["Unknown Department"] + 1
+            if(unknown_gender):
+                stats["Unknown Gender"] = stats["Unknown Gender"] + 1
+    return stats
