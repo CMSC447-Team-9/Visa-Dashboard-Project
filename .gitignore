@@ -1,2 +1,5 @@
 ##cached python files
 **/__pycache__/
+
+##Outputs
+parsed_sheet_data.txt
