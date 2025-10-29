@@ -4,11 +4,10 @@ import { useRef, useState, useEffect } from "react"
 import { DashboardData, visaTypes } from "../types/DashboardData"
 import { EmployeeRecord } from "../types/EmployeeRecord"
 import DashboardTable from "@/components/DashboardTable"
+import { DASHBOARD_PATH } from "../types/API_Paths"
 
 const cardClass1: string = "rounded-xl border border-[#A6A7A9] bg-[#B6B7B9] shadow-[0_0_10px_1px_rgba(0,0,0,0.1)]"
 const cardClass2: string = "rounded-xl border border-[#A6A7A9] bg-[#B6B7B9] shadow-[0_0_10px_5px_rgba(0,0,0,0.15)]"
-
-const DASHBOARD_API: string = "/api/dashboard"
 
 export default function Dashboard() {
     // Manage Data
@@ -17,7 +16,7 @@ export default function Dashboard() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch(DASHBOARD_API)
+                const res = await fetch(DASHBOARD_PATH)
                 if (!res.ok) throw new Error("Failed to fetch")
                 const json = await res.json()
                 setData(json)
