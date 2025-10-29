@@ -1,10 +1,11 @@
 "use client"
 
-import { useRef, useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { DashboardData, visaTypes } from "../types/DashboardData"
 import { EmployeeRecord } from "../types/EmployeeRecord"
 import DashboardTable from "@/components/DashboardTable"
 import { DASHBOARD_PATH } from "../types/API_Paths"
+import DashboardFilter from "@/components/DashboardFilter"
 
 const cardClass1: string = "rounded-xl border border-[#A6A7A9] bg-[#B6B7B9] shadow-[0_0_10px_1px_rgba(0,0,0,0.1)]"
 const cardClass2: string = "rounded-xl border border-[#A6A7A9] bg-[#B6B7B9] shadow-[0_0_10px_5px_rgba(0,0,0,0.15)]"
@@ -75,8 +76,14 @@ export default function Dashboard() {
     return (
         <div className="flex flex-row justify-center w-full h-full p-2 gap-4">
             {/* List of all Visas */}
-            <div className={`flex flex-col w-13/16 h-full justify-start p-4 gap-4 ${cardClass2} overflow-x-auto`}>
-                <DashboardTable data={entries} sortedBy={sortedBy} filterBy={filterBy} setSort={handleSort} setFilter={handleFilter}/>
+            <div className={`flex flex-col w-13/16 h-full justify-start p-4 gap-4 ${cardClass2}`}>
+                <div className="overflow-x-auto h-1/4 w-full">
+                    <DashboardFilter filterBy={filterBy} setFilter={setFilter}/>
+                </div>
+                <hr />
+                <div className="flex-1 overflow-x-auto w-full">
+                    <DashboardTable data={entries} sortedBy={sortedBy} filterBy={filterBy} setSort={handleSort} setFilter={handleFilter} />
+                </div>
             </div>
 
             {/* Summary of Visas */}

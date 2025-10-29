@@ -38,16 +38,17 @@ const columnLabels: Record<keyof EmployeeRecord, string> = {
     employeeEducationalField: "",
 }
 
-const formatCell = (column: keyof EmployeeRecord, value: any) => {
+const formatCell = (column: keyof EmployeeRecord, value: string | number) => {
     if (!value) return "Not Entered"
     switch (column) {
         case "expirationDate":
-            if (value == -1) return '-----'
-            if (!isNaN(value)) return new Date(value).toLocaleDateString('en-US')
-            if (value.toLowerCase().startsWith('done')) return 'Done'
+            if (value == -1) return 'Not Entered'
+            if (typeof value === "number" && !isNaN(value)) return new Date(value).toLocaleDateString('en-US')
+            if (typeof value === "string" && value.toLowerCase().startsWith('done')) return 'Done'
             return value
 
         case "caseType":
+            if (typeof value != "string") return value
             if (value.toUpperCase().startsWith('H-1B')) return 'H-1B'
             if (value.toUpperCase().startsWith('J-1')) return 'J-1'
             if (value.toUpperCase().startsWith('F-1')) return 'F-1'
