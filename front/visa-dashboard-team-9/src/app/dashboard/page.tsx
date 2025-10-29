@@ -76,12 +76,12 @@ export default function Dashboard() {
     return (
         <div className="flex flex-row justify-center w-full h-full p-2 gap-4">
             {/* List of all Visas */}
-            <div className={`flex flex-col w-13/16 h-full items-center justify-center gap-4 ${cardClass2}`}>
+            <div className={`flex flex-col w-13/16 h-full justify-start p-4 gap-4 ${cardClass2} overflow-x-auto`}>
                 <DashboardTable data={entries} sortedBy={sortedBy} filterBy={filterBy} setSort={handleSort} setFilter={handleFilter}/>
             </div>
 
             {/* Summary of Visas */}
-            <div className={`flex flex-col w-3/16 h-full items-center gap-2`}>
+            <div className={`flex-1 flex flex-col h-full items-center gap-2`}>
 
                 {/* Active Visas */}
                 <div className={`flex flex-col w-full h-1/6 ${cardClass1} p-4 items-center cursor-pointer`} onClick={() => handleFilter("active")}>
