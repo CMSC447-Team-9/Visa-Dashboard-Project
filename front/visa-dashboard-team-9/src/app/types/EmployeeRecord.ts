@@ -10,12 +10,12 @@ export type EmployeeRecord = {
     caseType: string
     permanentResidencyNotes: string
     dependents: number | string
-    initialH1bStart: string
-    startDate: string
-    expirationDate: string
-    prepExtensionDate: string
-    maxHPeriod: string
-    documentExpiryI94: string
+    initialH1bStart: number | string
+    startDate: number | string
+    expirationDate: number | string
+    prepExtensionDate: number | string
+    maxHPeriod: number | string
+    documentExpiryI94: number | string
     generalNotes: string
     socCode: string
     socCodeDescription: string

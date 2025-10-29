@@ -42,7 +42,7 @@ const formatCell = (column: keyof EmployeeRecord, value: any) => {
     if (!value) return "Not Entered"
     switch (column) {
         case "expirationDate":
-            if (value == "?") return '-----'
+            if (value == -1) return '-----'
             if (!isNaN(value)) return new Date(value).toLocaleDateString('en-US')
             if (value.toLowerCase().startsWith('done')) return 'Done'
             return value
