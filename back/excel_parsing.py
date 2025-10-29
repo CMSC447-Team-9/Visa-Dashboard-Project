@@ -100,47 +100,44 @@ def get_case_type_totals(filtered_sheet):
     return (f1_count, j1_count, h1b_count, pr_count)
 
 
-# returns an array of dictionaries representing all employee records
+# returns the employee spreadsheet data formatted as a JSON string of employee records
 def get_employee_records():
-    # load excel sheet into a pandas DataFrame
+    # loads the employee data spreadsheet into a DataFrame
     df = pd.read_excel("Case tracking for CS class(updated).xlsx")
-    employee_records = [] # create array to store dictionaries that representing employee records
 
-    # iterate through all rows in df and create a dictionary for each row
-    for _, row in df.iterrows():
-        # each row in the sheet creates a dictionary that represents the employee record
-        record = {
-            "lastName":                 str(row.get("Last name", "")).strip(),
-            "firstName":                str(row.get("First Name", "")).strip(),
-            "employeeUmbcEmail":        str(row.get("Employee's UMBC email", "")).strip(),
-            "personalEmail":            str(row.get("Personal email", "")).strip(),
-            "filedBy":                  str(row.get("Filed by", "")).strip(),
-            "countryOfBirth":           str(row.get("Country of Birth", "")).strip(),
-            "allCitizenships":          str(row.get("All Citizenships", "")).strip(),
-            "gender":                   str(row.get("Gender", "")).strip(),
-            "caseType":                 str(row.get("Case type", "")).strip(),
-            "permanentResidencyNotes":  str(row.get("Permanent residency notes", "")).strip(),
-            "dependents":               str(row.get("Dependents", "")).strip(),
-            "initialH1bStart":          str(row.get("initial H-1B start", "")).strip(),
-            "startDate":                str(row.get("Start date", "")).strip(),
-            "expirationDate":           str(row.get("Expiration Date", "")).strip(),
-            "prepExtensionDate":        str(row.get("Prep extension date", "")).strip(),
-            "maxHPeriod":               str(row.get("Max H period", "")).strip(),
-            "documentExpiryI94":        str(row.get("Document Expiry I-94", "")).strip(),
-            "generalNotes":             str(row.get("General notes", "")).strip(),
-            "socCode":                  str(row.get("soc code", "")).strip(),
-            "socCodeDescription":       str(row.get("soc code description", "")).strip(),
-            "department":               str(row.get("Department", "")).strip(),
-            "employeeTitle":            str(row.get("Employee Title", "")).strip(),
-            "departmentAdmin":          str(row.get("Department Admin", "")).strip(),
-            "departmentAdvisorPiChair": str(row.get("Department Advisor/PI/chair", "")).strip(),
-            "annualSalary":             str(row.get("Annual Salary", "")).strip(),
-            "employeeEducationalLevel": str(row.get("Employee Educational  Level", "")).strip(),
-            "employeeEducationalField": str(row.get("Employee Educational Field", "")).strip(),
-        }
-        
-        # add employee record dictionary to array of employee records
-        employee_records.append(record)
+    # renaming the columns of the DataFrame
+    renamed_df = df.rename(columns={
+        "Last name": "lastName",
+        "First Name": "firstName",
+        "Employee's UMBC email": "employeeUmbcEmail",
+        "Personal email": "personalEmail",
+        "Filed by": "filedBy",
+        "Country of Birth": "countryOfBirth",
+        "All Citizenships": "allCitizenships",
+        "Gender": "gender",
+        "Case type": "caseType",
+        "Permanent residency notes": "permanentResidencyNotes",
+        "Dependents": "dependents",
+        "initial H-1B start": "initialH1bStart",
+        "Start date": "startDate",
+        "Expiration Date": "expirationDate",
+        "Prep extension date": "prepExtensionDate",
+        "Max H period": "maxHPeriod",
+        "Document Expiry I-94": "documentExpiryI94",
+        "General notes": "generalNotes",
+        "soc code": "socCode",
+        "soc code description": "socCodeDescription",
+        "Department": "department",
+        "Employee Title": "employeeTitle",
+        "Department Admin": "departmentAdmin",
+        "Department Advisor/PI/chair": "departmentAdvisorPiChair",
+        "Annual Salary": "annualSalary",
+        "Employee Educational  Level": "employeeEducationalLevel",
+        "Employee Educational Field": "employeeEducationalField",
+    })
 
-    # return array of all employee records
-    return employee_records
+    # clean up the DataFrame to fill empty cells with empty strings
+    clean_df = renamed_df.fillna("")
+
+    # return the DataFrame as a JSON string
+    return clean_df.to_json(orient="records", force_ascii=False)
