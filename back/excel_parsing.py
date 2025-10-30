@@ -2,7 +2,7 @@ import pandas as pd
 
 # returns excel sheet parsed by pandas
 def get_excel():
-    excel = pd.read_excel("Case tracking for CS class.xlsx")
+    excel = pd.read_excel("Case tracking for CS class(updated).xlsx")
     mask = excel["Start date"].map(type) == str
     excel.loc[mask, "Start date"] = (excel.loc[mask, "Start date"].str.extract(r'(\d{1,2}[/]\d{1,2}[/]\d{2,4})')[0])
     excel["Start date"] = pd.to_datetime(excel["Start date"], errors='coerce')
@@ -11,8 +11,8 @@ def get_excel():
 
 # returns a DataFrame that contains only the live cases
 def current_visas(excel):
-    #excel: dataframe of full excel sheet
-    #returns dataframe of excel sheet with only everyones current visas
+    # excel: DataFrame of full excel sheet
+    # returns DataFrame of excel sheet with only everyones current visas
     excel_sorted = excel.sort_values(by="Start date", ascending=False)
     today = pd.Timestamp.today().normalize()
     excel_sorted = excel_sorted[excel_sorted["Start date"] < today]
@@ -25,9 +25,10 @@ def current_visas(excel):
     return excel_sorted
 
 
+# returns list of dictionaries containing necessary info on all people whos visas are close to expiring
 def visas_to_renew(excel):
-    #excel: dataframe of sorted excel sheet containing only current visas
-    #returns list of dictionaries containing info on all people whos visas are up for renewal
+    # excel: DataFrame of sorted excel sheet containing only current visas
+    # returns list of dictionaries containing info on all people whos visas are up for renewal
     today = pd.Timestamp.today().normalize()
     renew_list = []
     for _, row in excel.iterrows():
@@ -97,3 +98,46 @@ def get_case_type_totals(filtered_sheet):
 
     # return tuple with totals for each case type
     return (f1_count, j1_count, h1b_count, pr_count)
+
+
+# returns the employee spreadsheet data formatted as a JSON string of employee records
+def get_employee_records():
+    # loads the employee data spreadsheet into a DataFrame
+    df = pd.read_excel("Case tracking for CS class(updated).xlsx")
+
+    # renaming the columns of the DataFrame
+    renamed_df = df.rename(columns={
+        "Last name": "lastName",
+        "First Name": "firstName",
+        "Employee's UMBC email": "employeeUmbcEmail",
+        "Personal email": "personalEmail",
+        "Filed by": "filedBy",
+        "Country of Birth": "countryOfBirth",
+        "All Citizenships": "allCitizenships",
+        "Gender": "gender",
+        "Case type": "caseType",
+        "Permanent residency notes": "permanentResidencyNotes",
+        "Dependents": "dependents",
+        "initial H-1B start": "initialH1bStart",
+        "Start date": "startDate",
+        "Expiration Date": "expirationDate",
+        "Prep extension date": "prepExtensionDate",
+        "Max H period": "maxHPeriod",
+        "Document Expiry I-94": "documentExpiryI94",
+        "General notes": "generalNotes",
+        "soc code": "socCode",
+        "soc code description": "socCodeDescription",
+        "Department": "department",
+        "Employee Title": "employeeTitle",
+        "Department Admin": "departmentAdmin",
+        "Department Advisor/PI/chair": "departmentAdvisorPiChair",
+        "Annual Salary": "annualSalary",
+        "Employee Educational  Level": "employeeEducationalLevel",
+        "Employee Educational Field": "employeeEducationalField",
+    })
+
+    # clean up the DataFrame to fill empty cells with empty strings
+    clean_df = renamed_df.fillna("")
+
+    # return the DataFrame as a JSON string
+    return clean_df.to_json(orient="records", force_ascii=False)
