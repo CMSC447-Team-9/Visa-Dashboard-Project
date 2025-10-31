@@ -3,15 +3,20 @@
 import { useState, useEffect } from "react"
 import { DashboardData, visaTypes } from "../types/DashboardData"
 import { EmployeeRecord } from "../types/EmployeeRecord"
-import DashboardTable from "@/components/DashboardTable"
 import { DASHBOARD_PATH } from "../types/API_Paths"
+import { RecordFilters } from "../types/RecordFilters"
+import DashboardTable from "@/components/DashboardTable"
 import DashboardFilter from "@/components/DashboardFilter"
 
 const cardClass1: string = "rounded-xl border border-[#A6A7A9] bg-[#B6B7B9] shadow-[0_0_10px_1px_rgba(0,0,0,0.1)]"
 const cardClass2: string = "rounded-xl border border-[#A6A7A9] bg-[#B6B7B9] shadow-[0_0_10px_5px_rgba(0,0,0,0.15)]"
 
 export default function Dashboard() {
-    // Manage Data
+    /* 
+    THIS SECTION HANDLES RETRIEVING AND STORING DATA FROM API
+    data: DashboardData Object
+    setData: Setter for data, takes DashboardData as argument
+     */
     const [data, setData] = useState<DashboardData | null>(null)
 
     useEffect(() => {
@@ -29,7 +34,15 @@ export default function Dashboard() {
         fetchData()
     }, [])
 
-    // Manage sorting
+    /* 
+    THIS SECTION HANDLES THE SORTING CRITERIA FOR DATA
+    Default:
+    key: lastName
+    direction: asc
+
+    sortedBy: (key, direction): where key is the column, and direction is "asc" or "desc" for ascending and descending, respectively
+    setSort: Setter for sorting, takes a tuple (key, direction)
+    */
     const [sortedBy, setSort] = useState<{ key: keyof EmployeeRecord; direction: "asc" | "desc" }>({
         key: "lastName",
         direction: "asc",
@@ -38,19 +51,54 @@ export default function Dashboard() {
     const handleSort = (key: keyof EmployeeRecord) => {
         setSort((prev) => {
             if (prev.key === key) {
-                return { key, direction: prev.direction === "asc" ? "desc" : "asc" };
+                return { key, direction: prev.direction === "asc" ? "desc" : "asc" }
             }
-            return { key, direction: "asc" };
-        });
+            return { key, direction: "asc" }
+        })
     }
 
-    // Manage Filtering
-    const [filterBy, setFilter] = useState("all")
+    /*
+    THIS SECTION HANDLES FILTERING CRITERIA FOR DATA
+    */
+    const [filterBy, setFilter] = useState<RecordFilters>({})
 
-    const handleFilter = (criteria: string) => {
-        setFilter(criteria)
+    function updateFilter<K extends keyof EmployeeRecord>(
+        key: K,
+        value: EmployeeRecord[K][] | { min?: EmployeeRecord[K]; max?: EmployeeRecord[K] } | undefined
+    ) {
+
+        // This bit of logic converts single filters "example" to ["example"]
+        let newValue
+        if (value === undefined) newValue = undefined
+        else if (!Array.isArray(value) && typeof value !== "object") newValue = [value]
+        else newValue = value
+
+        setFilter(prev => ({
+            ...prev,
+            [key]: newValue,
+        }))
     }
 
+    // This function returns all unique values from a given key in EmployeeRecord
+    function getUniqueValues(employees: EmployeeRecord[]): Partial<{ [K in keyof EmployeeRecord]: EmployeeRecord[K][] }> {
+        if (employees.length === 0) return {}
+
+        return Object.fromEntries(
+            (Object.keys(employees[0]) as (keyof EmployeeRecord)[])
+                .map(key => {
+                    const values = Array.from(new Set(employees.map(emp => emp[key])))
+                    const sorted = values.slice().sort((a, b) => {
+                        if (typeof a === "number" && typeof b === "number") return a - b
+                        return String(a).localeCompare(String(b))
+                    })
+                    return [key, sorted]
+                })
+        )
+
+    }
+
+
+    // Simple Getters
     const getActiveVisas = (): number => {
         if (!data) return 0
         return data.active
@@ -76,13 +124,15 @@ export default function Dashboard() {
     return (
         <div className="flex flex-row justify-center w-full h-full p-2 gap-4">
             {/* List of all Visas */}
-            <div className={`flex flex-col w-13/16 h-full justify-start p-4 gap-4 ${cardClass2}`}>
-                <div className="overflow-x-auto h-1/4 w-full">
-                    <DashboardFilter filterBy={filterBy} setFilter={setFilter}/>
+            <div className={`flex flex-col w-13/16 h-full p-4 gap-4 ${cardClass2}`}>
+                {/* Filter panel */}
+                <div className="overflow-x-auto">
+                    <DashboardFilter filterOptions={getUniqueValues(getEntries())} filterBy={filterBy} updateFilter={updateFilter} />
                 </div>
                 <hr />
-                <div className="flex-1 overflow-x-auto w-full">
-                    <DashboardTable data={entries} sortedBy={sortedBy} filterBy={filterBy} setSort={handleSort} setFilter={handleFilter} />
+                {/* Table container */}
+                <div className="flex-1 min-h-0 overflow-x-auto overflow-y-auto w-full">
+                    <DashboardTable data={entries} sortedBy={sortedBy} filterBy={filterBy} setSort={handleSort} />
                 </div>
             </div>
 
@@ -90,7 +140,7 @@ export default function Dashboard() {
             <div className={`flex-1 flex flex-col h-full items-center gap-2`}>
 
                 {/* Active Visas */}
-                <div className={`flex flex-col w-full h-1/6 ${cardClass1} p-4 items-center cursor-pointer`} onClick={() => handleFilter("active")}>
+                <div className={`flex flex-col w-full h-1/6 ${cardClass1} p-4 items-center cursor-pointer`} onClick={() => []}>
                     <span className="text-xl mb-2">
                         Active Visas:
                     </span>
@@ -118,7 +168,7 @@ export default function Dashboard() {
                     </span>
                     <span className="flex-1 flex flex-col items-center justify-evenly w-full text-2xl text-center gap-4">
                         {Object.entries(visaTypes).map(([label, value]) => (
-                            <span key={label} className="flex flex-col flex-1 items-center justify-center border w-full rounded-xl cursor-pointer" onClick={() => handleFilter(label)}>
+                            <span key={label} className="flex flex-col flex-1 items-center justify-center border w-full rounded-xl cursor-pointer" onClick={() =>{}}>
                                 <span className="font-semibold">{label.toUpperCase()}:</span>
                                 <span>{value}</span>
                             </span>

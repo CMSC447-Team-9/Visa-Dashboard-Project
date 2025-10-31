@@ -9,13 +9,13 @@ export type EmployeeRecord = {
     gender: string
     caseType: string
     permanentResidencyNotes: string
-    dependents: number | string
-    initialH1bStart: number | string
-    startDate: number | string
-    expirationDate: number | string
-    prepExtensionDate: number | string
-    maxHPeriod: number | string
-    documentExpiryI94: number | string
+    dependents: number
+    initialH1bStart: number
+    startDate: number 
+    expirationDate: number
+    prepExtensionDate: number
+    maxHPeriod: number
+    documentExpiryI94: number
     generalNotes: string
     socCode: string
     socCodeDescription: string
@@ -23,7 +23,7 @@ export type EmployeeRecord = {
     employeeTitle: string
     departmentAdmin: string
     departmentAdvisorPiChair: string
-    annualSalary: number | string
+    annualSalary: number
     employeeEducationalLevel: string
     employeeEducationalField: string
 }
