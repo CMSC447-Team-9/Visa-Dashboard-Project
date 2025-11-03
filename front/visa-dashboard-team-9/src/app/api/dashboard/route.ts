@@ -6,10 +6,10 @@ import { testData } from "@/app/data/testEntries"
 export async function GET() {
     const dummyData: EmployeeRecord[] = getUniqueEmployeesByMostRecent(testData)
     const visaTypes = {
-        h1b: 999,
-        j1: 999,
-        f1: 999,
-        residency: 999
+        "H1-B": 999,
+        "J1": 999,
+        "F1": 999,
+        "Permanent Residency": 999
     }
     const data: DashboardData = {
         status: "success",

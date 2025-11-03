@@ -77,29 +77,32 @@ export default function DashboardTable({ data, sortedBy, filterBy, setSort }: Da
     })
 
     return (
-        <table className="min-w-0 w-full table-fixed">
-            <thead>
-                <tr>
-                    {columnKeys.map(key => (
-                        <th key={key} className="border px-2 py-2 cursor-pointer hover:bg-[#c7c8ca] break-words select-none" onClick={() => setSort(key)}>
-                            {columnLabels[key]}
-                            {sortedBy.key === key ? (sortedBy.direction === "asc" ? " ↑" : " ↓") : ""}
-                        </th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {sortedData.map((row, i) => (
-                    <tr key={i} className="border-t hover:bg-[#c7c8ca]">
-                        {columnKeys.map(column => (
-                            <td key={column} className="border px-2 py-2 text-center break-words">
-                                {formatCell(column, row[column])}
-                            </td>
+        <div className="flex-1 min-h-0 overflow-x-auto overflow-y-auto w-full">
+
+            <table className="min-w-0 w-full table-fixed">
+                <thead>
+                    <tr>
+                        {columnKeys.map(key => (
+                            <th key={key} className="border px-2 py-2 cursor-pointer hover:bg-[#c7c8ca] break-words select-none" onClick={() => setSort(key)}>
+                                {columnLabels[key]}
+                                {sortedBy.key === key ? (sortedBy.direction === "asc" ? " ↑" : " ↓") : ""}
+                            </th>
                         ))}
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {sortedData.map((row, i) => (
+                        <tr key={i} className="border-t hover:bg-[#c7c8ca]">
+                            {columnKeys.map(column => (
+                                <td key={column} className="border px-2 py-2 text-center break-words">
+                                    {formatCell(column, row[column])}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     )
 }
 
@@ -108,7 +111,7 @@ const formatCell = (column: keyof EmployeeRecord, value: string | number) => {
     switch (column) {
         case "expirationDate":
             if (value == -1) return 'Not Entered'
-            if (typeof value === "number" && !isNaN(value)) return new Date(value).toLocaleDateString('en-US')
+            if (typeof value === "number" && !isNaN(value)) return new Date(value).toLocaleDateString()
             if (typeof value === "string" && value.toLowerCase().startsWith('done')) return 'Done'
             return value
 

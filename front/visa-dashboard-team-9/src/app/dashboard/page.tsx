@@ -125,15 +125,11 @@ export default function Dashboard() {
         <div className="flex flex-row justify-center w-full h-full p-2 gap-4">
             {/* List of all Visas */}
             <div className={`flex flex-col w-13/16 h-full p-4 gap-4 ${cardClass2}`}>
-                {/* Filter panel */}
-                <div className="overflow-x-auto">
-                    <DashboardFilter filterOptions={getUniqueValues(getEntries())} filterBy={filterBy} updateFilter={updateFilter} />
-                </div>
+                {/* Filter component */}
+                <DashboardFilter filterOptions={getUniqueValues(getEntries())} filterBy={filterBy} updateFilter={updateFilter} />
                 <hr />
-                {/* Table container */}
-                <div className="flex-1 min-h-0 overflow-x-auto overflow-y-auto w-full">
-                    <DashboardTable data={entries} sortedBy={sortedBy} filterBy={filterBy} setSort={handleSort} />
-                </div>
+                {/* Table component */}
+                <DashboardTable data={entries} sortedBy={sortedBy} filterBy={filterBy} setSort={handleSort} />
             </div>
 
             {/* Summary of Visas */}
@@ -168,7 +164,7 @@ export default function Dashboard() {
                     </span>
                     <span className="flex-1 flex flex-col items-center justify-evenly w-full text-2xl text-center gap-4">
                         {Object.entries(visaTypes).map(([label, value]) => (
-                            <span key={label} className="flex flex-col flex-1 items-center justify-center border w-full rounded-xl cursor-pointer" onClick={() =>{}}>
+                            <span key={label} className="flex flex-col flex-1 items-center justify-center border w-full rounded-xl cursor-pointer" onClick={() => { updateFilter("caseType", [label]) }}>
                                 <span className="font-semibold">{label.toUpperCase()}:</span>
                                 <span>{value}</span>
                             </span>

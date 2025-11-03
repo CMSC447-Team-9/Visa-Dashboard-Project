@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from "react"
 import { createPortal } from "react-dom"
-import { EmployeeRecord } from "@/app/types/EmployeeRecord"
-import { RecordFilters } from "@/app/types/RecordFilters"
+import { EmployeeRecord, RecordTypes } from "@/app/types/EmployeeRecord"
+import { RecordFilters, FilterValue } from "@/app/types/RecordFilters"
 import { columnLabels } from "./DashboardTable"
 
 type DashboardFilterProps = {
@@ -53,42 +53,96 @@ export default function DashboardFilter({ filterOptions, filterBy, updateFilter,
     }, [openMenu])
 
     return (
-        <div className="grid gap-4 w-full p-4" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
-            {keys.map(key => {
-                const selected = filterBy[key] as EmployeeRecord[typeof key][] | undefined
-                return (
-                    <div key={key} className="flex flex-row items-center justify-between gap-4 relative">
-                        <label className="font-semibold mb-1">{columnLabels[key] ?? key}:</label>
-                        <div className="relative flex-1">
-                            <button ref={el => { buttonRefs.current[key as string] = el }} className="border p-2 rounded text-left w-full" onClick={() => handleClick(key)}>
-                                {selected && selected.length > 0 ? selected.join(", ") : "Select..."}
-                            </button>
-                            {openMenu === key && createPortal(
-                                <div ref={el => { menuRefs.current[key as string] = el }} className="absolute z-50 border rounded bg-white shadow-lg max-h-60 overflow-auto" style={{ top: dropdownPos.top, left: dropdownPos.left, width: dropdownPos.width }}>
-                                    {filterOptions[key]?.map(option => {
-                                        const isSelected = selected?.includes(option as any)
-                                        return (
-                                            <div key={String(option)} className={`p-2 cursor-pointer hover:bg-gray-100 ${isSelected ? "bg-blue-100 font-semibold" : ""}`} onClick={() => {
-                                                let newSelected: EmployeeRecord[typeof key][] = selected ? [...selected] : []
-                                                if (isSelected) newSelected = newSelected.filter(v => v !== option)
-                                                else newSelected.push(option as EmployeeRecord[typeof key])
-                                                updateFilter(key, newSelected.length > 0 ? newSelected : undefined)
-                                            }}>
-                                                {String(option)}
-                                            </div>
-                                        )
-                                    })}
-                                </div>,
-                                document.body
-                            )}
+        <div className="overflow-x-auto">
+            {/* Filter Grid */}
+            <div className="grid gap-4 w-full p-4" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
+                {keys.map(key => {
+                    const selected = filterBy[key] as FilterValue<EmployeeRecord[typeof key]> | undefined;
+                    return (
+                        <div key={key} className="flex flex-row items-center justify-between gap-4 relative">
+                            <label className="font-semibold mb-1 w-1/4">{columnLabels[key] ?? key}:</label>
+                            <div className="relative flex-1">
+                                {/* This is the selection/display for the filter */}
+                                <button ref={el => { buttonRefs.current[key as string] = el }} className="border p-2 rounded text-left w-full" onClick={() => handleClick(key)}>
+                                    {(() => {
+                                        if (!selected) return "Select..."
+                                        const fieldType = RecordTypes[key]
+                                        if (fieldType === "string") return Array.isArray(selected) ? selected.join(", ") : String(selected)
+
+                                        if (!Array.isArray(selected)) {
+                                            const { min, max } = selected as { min?: number; max?: number }
+                                            const format = fieldType === "timestamp"
+                                                ? (v: number) => new Date(v).toLocaleDateString()  
+                                                : (v: number) => v.toString()
+
+                                            if (min !== undefined && max !== undefined) return `${format(min)} <-> ${format(max)}`
+                                            if (min !== undefined) return `≥ ${format(min)}`
+                                            if (max !== undefined) return `≤ ${format(max)}`
+                                        }
+
+                                        return "Select..."
+                                    })()}
+                                </button>
+
+                                {/* This is the menu to select for that filter */}
+                                {openMenu === key && createPortal(
+                                    <div ref={el => { menuRefs.current[key as string] = el }} className="absolute z-50 border rounded bg-white shadow-lg max-h-60 overflow-auto" style={{ top: dropdownPos.top, left: dropdownPos.left, width: dropdownPos.width }}>
+                                        {(() => {
+                                            const fieldType = RecordTypes[key]
+                                            if (fieldType === "string") {
+                                                return filterOptions[key]?.map(option => {
+                                                    const isSelected = Array.isArray(selected) && selected.includes(option)
+                                                    return (
+                                                        <div key={String(option)} className={`p-2 cursor-pointer hover:bg-gray-100 ${isSelected ? "bg-blue-100 font-semibold" : ""}`} onClick={() => {
+                                                            let newSelected = Array.isArray(selected) ? [...selected] : []
+                                                            if (isSelected) newSelected = newSelected.filter(v => v !== option)
+                                                            else newSelected.push(option as EmployeeRecord[typeof key])
+                                                            updateFilter(key, newSelected.length > 0 ? newSelected : undefined)
+                                                        }}>
+                                                            {String(option || "Not Entered")}
+                                                        </div>
+                                                    )
+                                                })
+                                            } else if (fieldType === "number") {
+                                                return (
+                                                    <div className="flex flex-row gap-2 p-2">
+                                                        <div className="w-1/2">
+                                                            <label className="text-sm font-medium w-full">Min</label>
+                                                            <input type="number" className="border rounded p-1 w-full" defaultValue={selected && !Array.isArray(selected) ? selected.min ?? "" : ""} onChange={e => updateFilter(key, { ...(Array.isArray(selected) ? {} : selected), min: e.target.value ? Number(e.target.value) as EmployeeRecord[typeof key] : undefined })} />
+                                                        </div>
+                                                        <div className="flex-1">
+                                                            <label className="text-sm font-medium w-full">Max</label>
+                                                            <input type="number" className="border rounded p-1 w-full" defaultValue={selected && !Array.isArray(selected) ? selected.max ?? "" : ""} onChange={e => updateFilter(key, { ...(Array.isArray(selected) ? {} : selected), max: e.target.value ? Number(e.target.value) as EmployeeRecord[typeof key] : undefined })} />
+                                                        </div>
+                                                    </div>
+                                                )
+                                            } else if (fieldType === "timestamp") {
+                                                return (
+                                                    <div className="flex flex-col gap-2 p-2">
+                                                        <div className="">
+                                                            <label className="text-sm font-medium w-full">Start Date</label>
+                                                            <input type="date" className="border rounded p-1 w-full" defaultValue={selected && !Array.isArray(selected) && selected.min ? new Date(selected.min).toISOString().slice(0,10) : ""} onChange={e => updateFilter(key, { ...(Array.isArray(selected) ? {} : selected), min: e.target.value ? new Date(e.target.value).getTime() as EmployeeRecord[typeof key] : undefined })} />
+                                                        </div>
+                                                        <div className="">
+                                                            <label className="text-sm font-medium w-full">End Date</label>
+                                                            <input type="date" className="border rounded p-1 w-full" defaultValue={selected && !Array.isArray(selected) && selected.max ? new Date(selected.max).toISOString().slice(0,10) : ""} onChange={e => updateFilter(key, { ...(Array.isArray(selected) ? {} : selected), max: e.target.value ? new Date(e.target.value).getTime() as EmployeeRecord[typeof key] : undefined })} />
+                                                        </div>
+                                                    </div>
+                                                )
+                                            } else {
+                                                return ""
+                                            }
+                                        })()}
+                                    </div>,
+                                    document.body)}
+                            </div>
                         </div>
-                    </div>
-                )
-            })}
+                    )
+                })}
+            </div>
+            {/* Clear Filters Button */}
             <div className="flex justify-end">
-                <button className="border p-2 rounded bg-red-100 text-red-800 hover:bg-red-200" onClick={() => {
-                    keys.forEach(key => updateFilter(key, undefined))
-                }}>
+                <button className="border p-2 rounded bg-red-100 text-red-800 hover:bg-red-200 w-1/8" onClick={() => { keys.forEach(key => updateFilter(key, undefined)) }}>
                     Clear Filters
                 </button>
             </div>
