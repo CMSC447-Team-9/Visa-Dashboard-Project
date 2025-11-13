@@ -4,9 +4,7 @@ import { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { Upload } from "lucide-react"
-
-
-const API_PATH: string = "/api/upload"
+import { UPLOAD_PATH } from "./types/API_Paths"
 
 export default function Home() {
     const fileIn = useRef<HTMLInputElement | null>(null)
@@ -31,7 +29,7 @@ export default function Home() {
         try {
             const formData = new FormData()
             formData.append("file", file)
-            const res = await fetch(API_PATH, {
+            const res = await fetch(UPLOAD_PATH, {
                 method: "POST",
                 body: formData,
             })
