@@ -2,34 +2,15 @@ import { EmployeeRecord } from "@/app/types/EmployeeRecord"
 import { RecordFilters } from "@/app/types/RecordFilters"
 
 // To show/hide a column, just add a header corresponding to that column
-export const columnLabels: Record<keyof EmployeeRecord, string> = {
+export const columnLabels: Partial<Record<keyof EmployeeRecord, string>> = {
     lastName: "Last Name",
     firstName: "First Name",
     employeeUmbcEmail: "UMBC Email",
-    personalEmail: "",
     expirationDate: "Expiry Date",
     filedBy: "Filed By",
     countryOfBirth: "Birth Country",
-    allCitizenships: "",
-    gender: "",
     caseType: "Visa Type",
-    permanentResidencyNotes: "",
-    dependents: "",
-    initialH1bStart: "",
-    startDate: "",
-    prepExtensionDate: "",
-    maxHPeriod: "",
-    documentExpiryI94: "",
-    generalNotes: "",
-    socCode: "",
-    socCodeDescription: "",
     department: "Department",
-    employeeTitle: "",
-    departmentAdmin: "",
-    departmentAdvisorPiChair: "",
-    annualSalary: "",
-    employeeEducationalLevel: "",
-    employeeEducationalField: "",
 }
 
 type DashboardTableProps = {
