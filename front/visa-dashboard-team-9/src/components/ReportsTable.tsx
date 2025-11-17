@@ -49,6 +49,8 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
         })
     )
 
+    var number = filteredData.length
+
     const sortedData = [...filteredData].sort((a, b) => {
         const aValue = a[sortedBy.key];
         const bValue = b[sortedBy.key];
@@ -58,7 +60,11 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
     })
 
     return (
-        <div className="flex-1 min-h-0 overflow-x-auto overflow-y-auto w-full">
+        <div className="flex-1 min-h-0 w-full overflow-x-auto overflow-y-auto">
+
+            <div className="h-1/10">
+                <p>Results: {number}</p>
+            </div>
 
             <table className="min-w-0 w-full table-fixed">
                 <thead>
@@ -83,6 +89,7 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
                     ))}
                 </tbody>
             </table>
+            
         </div>
     )
 }
