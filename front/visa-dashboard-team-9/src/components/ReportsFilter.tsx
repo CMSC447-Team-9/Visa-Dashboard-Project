@@ -4,9 +4,9 @@ import { useState, useRef, useEffect } from "react"
 import { createPortal } from "react-dom"
 import { EmployeeRecord, RecordTypes } from "@/types/EmployeeRecord"
 import { RecordFilters, FilterValue } from "@/types/RecordFilters"
-import { columnLabels } from "./DashboardTable"
+import { columnLabels } from "./ReportsTable"
 
-type DashboardFilterProps = {
+type ReportsFilterProps = {
     filterOptions: Partial<{ [K in keyof EmployeeRecord]: EmployeeRecord[K][] }>
     filterBy: RecordFilters
     updateFilter: <K extends keyof EmployeeRecord>(
@@ -16,7 +16,7 @@ type DashboardFilterProps = {
     columns?: number
 }
 
-export default function DashboardFilter({ filterOptions, filterBy, updateFilter, columns = 3 }: DashboardFilterProps) {
+export default function ReportsFilter({ filterOptions, filterBy, updateFilter, columns = 3 }: ReportsFilterProps) {
     // This display filter options based on which columns are actually visible in the table
     const visibleColumns = (Object.keys(columnLabels) as (keyof EmployeeRecord)[]).filter(key => columnLabels[key]?.trim() !== "")
     const keys = visibleColumns

@@ -13,14 +13,14 @@ export const columnLabels: Partial<Record<keyof EmployeeRecord, string>> = {
     department: "Department",
 }
 
-type DashboardTableProps = {
+type ReportsTableProps = {
     data: EmployeeRecord[]
     sortedBy: { key: keyof EmployeeRecord; direction: "asc" | "desc" }
     filterBy: RecordFilters
     setSort: (key: keyof EmployeeRecord) => void
 }
 
-export default function DashboardTable({ data, sortedBy, filterBy, setSort }: DashboardTableProps) {
+export default function ReportsTable({ data, sortedBy, filterBy, setSort }: ReportsTableProps) {
     const columnKeys = (Object.keys(columnLabels) as (keyof EmployeeRecord)[]).filter(
         key => columnLabels[key] !== ""
     )

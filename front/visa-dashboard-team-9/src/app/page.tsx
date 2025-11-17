@@ -39,7 +39,7 @@ export default function Home() {
                 return
             }
 
-            // Redirect to dashboard page
+            // Redirect to reports page
             router.push("/dashboard")
         } catch (err) {
             console.error("Error uploading file:", err)
