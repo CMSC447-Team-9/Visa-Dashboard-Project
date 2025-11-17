@@ -100,10 +100,41 @@ def get_case_type_totals(filtered_sheet):
     return (f1_count, j1_count, h1b_count, pr_count)
 
 
+# splits the "Case type" column into two columns to get clean visa types
+def split_case_type(df):
+    df = df.copy()
+    df["Case type extension"] = ""  
+
+    for ind, case in df["Case type"].items():
+        if pd.isna(case):
+            continue
+        original = str(case).strip()
+        case_string = original.lower()
+
+        if case_string.startswith("f-1"):
+            df.loc[ind, "Case type"] = "F-1"
+            df.loc[ind, "Case type extension"] = original[3:].strip()
+        elif case_string.startswith("j-1"):
+            df.loc[ind, "Case type"] = "J-1"
+            df.loc[ind, "Case type extension"] = original[3:].strip()
+        elif case_string.startswith("h-1b"):
+            df.loc[ind, "Case type"] = "H-1B"
+            df.loc[ind, "Case type extension"] = original[4:].strip()
+        else:
+            df.loc[ind, "Case type"] = str(case).strip()
+
+    case_column = df.pop("Case type extension")       
+    ind = df.columns.get_loc("Case type") + 1       
+    df.insert(ind, "Case type extension", case_column) 
+
+    return df
+
+
 # returns the employee spreadsheet data formatted as a JSON string of employee records
 def get_employee_records():
     # loads the employee data spreadsheet into a DataFrame
-    df = pd.read_excel("Case tracking for CS class(updated).xlsx")
+    df = get_excel()
+    df = split_case_type(df)
 
     # renaming the columns of the DataFrame
     renamed_df = df.rename(columns={
@@ -116,6 +147,7 @@ def get_employee_records():
         "All Citizenships": "allCitizenships",
         "Gender": "gender",
         "Case type": "caseType",
+        "Case type extension": "caseTypeExtension",
         "Permanent residency notes": "permanentResidencyNotes",
         "Dependents": "dependents",
         "initial H-1B start": "initialH1bStart",
