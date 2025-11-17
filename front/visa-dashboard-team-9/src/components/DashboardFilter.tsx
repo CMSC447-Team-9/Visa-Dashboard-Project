@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from "react"
 import { createPortal } from "react-dom"
-import { EmployeeRecord, RecordTypes } from "@/app/types/EmployeeRecord"
-import { RecordFilters, FilterValue } from "@/app/types/RecordFilters"
+import { EmployeeRecord, RecordTypes } from "@/types/EmployeeRecord"
+import { RecordFilters, FilterValue } from "@/types/RecordFilters"
 import { columnLabels } from "./DashboardTable"
 
 type DashboardFilterProps = {

@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { DashboardData, visaTypes } from "../types/DashboardData"
-import { EmployeeRecord } from "../types/EmployeeRecord"
-import { DASHBOARD_PATH } from "../types/API_Paths"
-import { RecordFilters } from "../types/RecordFilters"
+import { DashboardData, visaTypes } from "@/types/DashboardData"
+import { EmployeeRecord } from "@/types/EmployeeRecord"
+import { DASHBOARD_PATH } from "@/types/API_Paths"
+import { RecordFilters } from "@/types/RecordFilters"
 import DashboardTable from "@/components/DashboardTable"
 import DashboardFilter from "@/components/DashboardFilter"
 

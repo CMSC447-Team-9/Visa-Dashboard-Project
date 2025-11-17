@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
-import { EmployeeRecord } from "@/app/types/EmployeeRecord"
-import { DashboardData } from "@/app/types/DashboardData"
-import { testData } from "@/app/data/testEntries"
+import { EmployeeRecord } from "@/types/EmployeeRecord"
+import { DashboardData } from "@/types/DashboardData"
+import { testData } from "@/data/testEntries"
 
 export async function GET() {
     const dummyData: EmployeeRecord[] = getUniqueEmployeesByMostRecent(testData)

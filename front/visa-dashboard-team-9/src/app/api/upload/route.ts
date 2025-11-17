@@ -11,7 +11,10 @@ export const POST = async (req: NextRequest) => {
 
   try {
     // Process the file (save to disk, DB, etc.)
-    const success = true; // replace with actual processing logic
+    const success = true
+    const arrayBuffer = await file.arrayBuffer();
+    const uint8Array = new Uint8Array(arrayBuffer)
+    console.log(uint8Array)
 
     if (!success) {
       return NextResponse.json(

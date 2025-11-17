@@ -4,7 +4,7 @@ import { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { Upload } from "lucide-react"
-import { UPLOAD_PATH } from "./types/API_Paths"
+import { UPLOAD_PATH } from "@/types/API_Paths"
 
 export default function Home() {
     const fileIn = useRef<HTMLInputElement | null>(null)

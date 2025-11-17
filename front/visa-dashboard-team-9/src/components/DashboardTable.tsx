@@ -1,5 +1,5 @@
-import { EmployeeRecord } from "@/app/types/EmployeeRecord"
-import { RecordFilters } from "@/app/types/RecordFilters"
+import { EmployeeRecord } from "@/types/EmployeeRecord"
+import { RecordFilters } from "@/types/RecordFilters"
 
 // To show/hide a column, just add a header corresponding to that column
 export const columnLabels: Partial<Record<keyof EmployeeRecord, string>> = {
