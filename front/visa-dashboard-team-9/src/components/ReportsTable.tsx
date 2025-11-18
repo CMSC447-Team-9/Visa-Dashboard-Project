@@ -49,7 +49,7 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
         })
     )
 
-    var number = filteredData.length
+    var numResults = filteredData.length //finds the number of results after filters are applied
 
     const sortedData = [...filteredData].sort((a, b) => {
         const aValue = a[sortedBy.key];
@@ -62,8 +62,10 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
     return (
         <div className="flex-1 min-h-0 w-full overflow-x-auto overflow-y-auto">
 
-            <div className="h-1/10">
-                <p>Results: {number}</p>
+            
+            <div className="h-1/9 flex" style={{ fontSize : 27, alignItems : "center", paddingBottom : 13}}> 
+                <p>Results:&nbsp;</p>
+                <p className="important_text">{numResults}</p>
             </div>
 
             <table className="min-w-0 w-full table-fixed">

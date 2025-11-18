@@ -10,3 +10,15 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* css style for red underlined font */
+.important_text {
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-weight:lighter;
+
+  text-decoration: underline;
+
+  color: #c03000;
+}
