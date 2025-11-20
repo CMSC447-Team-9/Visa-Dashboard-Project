@@ -15,9 +15,13 @@ type NavButton = {
 
 // Groups of buttons for specific pages
 const groups: Record<string, NavButton[]> = {
+    reports: [
+        { name: "Home", href: "/dashboard", icon: Home },
+        { name: "Reports", href: "/reports", icon: FileText },
+    ],
     dashboard: [
         { name: "Home", href: "/dashboard", icon: Home },
-        { name: "Reports", href: "/dashboard/reports", icon: FileText },
+        { name: "Reports", href: "/reports", icon: FileText },
     ]
 }
 
@@ -32,6 +36,7 @@ export default function Navigation() {
     // Select group based off path
     let activeGroup: NavButton[] = []
     if (pathname.startsWith("/dashboard")) activeGroup = groups.dashboard
+    if (pathname.startsWith("/reports")) activeGroup = groups.reports
 
 
     // Logout and clear cookies

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { EmployeeRecord } from "@/types/EmployeeRecord"
-import { DashboardData } from "@/types/DashboardData"
+import { ReportsData } from "@/types/ReportsData"
 import { testData } from "@/data/testEntries"
 
 export async function GET() {
@@ -11,7 +11,7 @@ export async function GET() {
         "F1": 999,
         "Permanent Residency": 999
     }
-    const data: DashboardData = {
+    const data: ReportsData = {
         status: "success",
         timestamp: Date.now().toLocaleString('en-US'),
         active: -999,

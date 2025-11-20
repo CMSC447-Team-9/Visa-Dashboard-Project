@@ -1,5 +1,5 @@
 import { EmployeeRecord } from "./EmployeeRecord"
-export type DashboardData = {
+export type ReportsData = {
     status: string,
     timestamp: string,
     active: number,
