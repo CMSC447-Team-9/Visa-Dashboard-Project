@@ -13,16 +13,21 @@ def current_visas(excel):
     #returns dataframe of excel sheet with only everyones current visas
     #returned dataframe has 2 additional columns, "clean exp date" which has a timestamp object and "pending" which is a boolean
     excel_sorted = excel.sort_values(by="Start date", ascending=False)
+    #copies excel to excel_sorted and puts the earliest start dates at the top
     today = pd.Timestamp.today().normalize()
     excel_sorted = excel_sorted[excel_sorted["Start date"] < today]
+    #deletes any rows with start dates after today
     excel_sorted = excel_sorted.drop_duplicates(subset=["Last name", "First Name"], keep = 'first')
+    #deletes all rows but the most recent start date per person
     excel_sorted["clean exp date"] = excel_sorted["Expiration Date"]
     mask = excel_sorted["clean exp date"].map(type) == str
     excel_sorted.loc[mask, "clean exp date"] = (excel_sorted.loc[mask, "clean exp date"].str.extract(r'(\d{1,2}[/]\d{1,2}[/]\d{2,4})')[0])
     excel_sorted["clean exp date"] = pd.to_datetime(excel_sorted["clean exp date"], errors='coerce')
+    #copies expiration date column to clean exp date column and then converts clean exp date to a datetime
     excel_sorted = excel_sorted[(excel_sorted["clean exp date"].isna()) | (excel_sorted["clean exp date"] >= today)]
-    excel_sorted["pending"] = False
-    excel_sorted.loc[excel_sorted["Expiration Date"] == "?", "pending"] = True
+    #deletes any expired visa rows
+    excel_sorted = excel_sorted[~excel_sorted["Expiration Date"].astype(str).str.contains(r"\?", na=False)]
+    #deletes any pending visa rows
     return excel_sorted
 
 
@@ -33,8 +38,6 @@ def visas_to_renew(excel):
     renew_list = []
     for _, row in excel.iterrows():
         if "done" in str(row["Expiration Date"]):
-            continue
-        if row["pending"]:
             continue
         if pd.isna(row["clean exp date"]):
             renew_list.append({
@@ -67,17 +70,17 @@ def visas_to_renew(excel):
 
 
 def pending_visas(excel):
-    #params: excel: sorted excel sheet with only current cases
+    #params: excel: unsorted excel sheet with all cases
     #returns list of all pending visas
+    excel_pending = excel[excel["Expiration Date"].astype(str).str.contains(r"\?", na=False)]
     pending_list = []
-    for _, row in excel.iterrows():
-        if row["pending"] == True:
-            pending_list.append({
-                "Last name": row["Last name"],
-                "First name": row["First Name"],
-                "Case type": row["Case type"],
-                "Expiration date": "Unknown",
-            })
+    for _, row in excel_pending.iterrows():
+        pending_list.append({
+            "Last name": row["Last name"],
+            "First name": row["First Name"],
+            "Case type": row["Case type"],
+            "Expiration date": "Unknown",
+        })
     return pending_list
 
 # returns total number of live cases
