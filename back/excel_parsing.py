@@ -30,6 +30,7 @@ def current_visas(excel):
     #deletes any expired visa rows
     excel_sorted = excel_sorted[~excel_sorted["Expiration Date"].astype(str).str.contains(r"\?", na=False)]
     #deletes any pending visa rows
+    excel_sorted = add_college(excel_sorted)
     return excel_sorted
 
 

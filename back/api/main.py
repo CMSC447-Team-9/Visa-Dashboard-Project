@@ -2,7 +2,7 @@ from fastapi import FastAPI
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from excel_parsing import get_case_type_totals, get_total_live_cases
+import excel_parsing
 
 app = FastAPI()
 
@@ -12,8 +12,8 @@ async def api_upload():
 
 @app.get("/api/dashboard")
 async def api_dashboard():
-    f1_count, j1_count, h1b_count, pr_count = get_case_type_totals()
-    total_live_count = get_total_live_cases()
+    f1_count, j1_count, h1b_count, pr_count = excel_parsing.get_case_type_totals()
+    total_live_count = excel_parsing.get_total_live_cases()
 
     return {
         "total F-1 cases": f1_count,
