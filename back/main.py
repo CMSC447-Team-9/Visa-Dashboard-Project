@@ -6,7 +6,7 @@ if __name__ == '__main__':
     renew_list = excel_parsing.visas_to_renew(sorted_excel)
     stat_list = excel_parsing.get_report_stats(sorted_excel, excel)
     pending_list = excel_parsing.pending_visas(excel)
-    notes = excel_parsing.get_notes("Sally","Ensen",excel)
+    #notes = excel_parsing.get_notes("Sally@umbc.edu",excel)
     sorted_excel = excel_parsing.add_college(sorted_excel)
     print(sorted_excel[["Expiration Date","Last name"]])
     with open("parsed_sheet_data.txt",'w') as f:
