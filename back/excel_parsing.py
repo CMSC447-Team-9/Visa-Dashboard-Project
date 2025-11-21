@@ -328,11 +328,11 @@ def get_period_stats(excel):
 
 
 
-def get_notes(first_name, last_name, excel):
-    #params: first name and last name are self explanatory, excel sheet is unsorted and contains all current and past visas
+def get_notes(email, excel):
+    #params: email of person getting all notes on, excel sheet is unsorted and contains all current and past visas
     #returns concatenation of all current and former general notes based on first and last name as a string
     notes = "\n".join(
-    excel[(excel["First Name"] == first_name) & (excel["Last name"] == last_name)]["General notes"].dropna().astype(str)
+    excel[(excel["Employee's UMBC email"] == email)]["General notes"].dropna().astype(str)
     )
     return notes
 
