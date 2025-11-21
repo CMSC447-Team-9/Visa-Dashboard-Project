@@ -1,7 +1,7 @@
 import excel_parsing
 import pandas as pd
 if __name__ == '__main__':
-    excel = excel_parsing.get_excel()
+    excel = excel_parsing.get_excel("Case tracking for CS class.xlsx")
     sorted_excel = excel_parsing.current_visas(excel)
     renew_list = excel_parsing.visas_to_renew(sorted_excel)
     stat_list = excel_parsing.get_report_stats(sorted_excel, excel)

@@ -1,13 +1,21 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile, HTTPException
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import excel_parsing
+import pandas as pd
+from io import BytesIO
 
 app = FastAPI()
+app.state.excel: pd.DataFrame | None = None
 
 @app.post("/api/upload")
-async def api_upload():
+async def api_upload(file: UploadFile = File(...)):
+    if not file.filename.lower().endswith(('.xlsx', '.xls')):
+        raise HTTPException(status_code=400, detail="File must be .xlsx or .xls")
+    excel_bytes = await file.read()
+    excel_file = BytesIO(excel_bytes)
+    app.state.excel = excel_parsing.get_excel(excel_file)
     return {"message": "upload endpoint"}
 
 @app.get("/api/dashboard")
