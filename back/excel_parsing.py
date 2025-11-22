@@ -2,7 +2,7 @@ import pandas as pd
 
 # returns excel sheet parsed by pandas
 def get_excel(file):
-    excel = pd.read_excel("Case tracking for CS class.xlsx")
+    excel = pd.read_excel(file)
     mask = excel["Start date"].map(type) == str
     excel.loc[mask, "Start date"] = (excel.loc[mask, "Start date"].str.extract(r'(\d{1,2}[/]\d{1,2}[/]\d{2,4})')[0])
     excel["Start date"] = pd.to_datetime(excel["Start date"], errors='coerce')
@@ -73,17 +73,15 @@ def visas_to_renew(excel):
 
 
 # returns total number of live cases
-def get_total_live_cases():
-    all_cases = get_excel()
-    live_cases = current_visas(all_cases)
+def get_total_live_cases(df):
+    live_cases = current_visas(df)
     return len(live_cases)
 
 
-# returns a tuple representing the total for each case type
-def get_case_type_totals():
+# given a DataFrame that represents the whole sheet data, returns a tuple representing the total for each case type
+def get_case_type_totals(df):
 
-    all_cases = get_excel() # all cases
-    live_cases = current_visas(all_cases) # only live cases
+    live_cases = current_visas(df) # only live cases
     
     f1_count = 0 # total F-1 cases
     j1_count = 0 # total J-1 cases
@@ -108,7 +106,7 @@ def get_case_type_totals():
             h1b_count += 1
         
     # iterate through all cases
-    for case in all_cases["Case type"]:
+    for case in df["Case type"]:
         # skip this case if "Case type" field is missing
         if pd.isna(case):
             continue

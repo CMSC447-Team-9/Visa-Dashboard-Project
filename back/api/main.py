@@ -13,22 +13,31 @@ app.state.excel: pd.DataFrame | None = None
 async def api_upload(file: UploadFile = File(...)):
     if not file.filename.lower().endswith(('.xlsx', '.xls')):
         raise HTTPException(status_code=400, detail="File must be .xlsx or .xls")
+    
     excel_bytes = await file.read()
     excel_file = BytesIO(excel_bytes)
-    app.state.excel = excel_parsing.get_excel(excel_file)
-    return {"message": "upload endpoint"}
+
+    df = excel_parsing.get_excel(excel_file)
+    app.state.excel = df
+
+    return {
+        "filename": file.filename,
+        "rows": len(df),
+        "columns": len(df.columns)
+    }
 
 @app.get("/api/dashboard")
 async def api_dashboard():
-    f1_count, j1_count, h1b_count, pr_count = excel_parsing.get_case_type_totals()
-    total_live_count = excel_parsing.get_total_live_cases()
+    df = app.state.excel
+    f1_count, j1_count, h1b_count, pr_count = excel_parsing.get_case_type_totals(df)
+    total_live_count = excel_parsing.get_total_live_cases(df)
 
     return {
         "total F-1 cases": f1_count,
         "total J-1 cases": j1_count,
         "total H-1B cases": h1b_count,
         "total Permanent Residency cases": pr_count,
-        "total_live_cases": total_live_count,
+        "total live cases": total_live_count,
     }
 
 @app.get("/api/dashboard/{umbc_email}")
