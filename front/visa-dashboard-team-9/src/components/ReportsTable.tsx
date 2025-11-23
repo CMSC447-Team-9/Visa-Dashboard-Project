@@ -62,10 +62,11 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
     return (
         <div className="flex-1 min-h-0 w-full overflow-x-auto overflow-y-auto">
 
-            
-            <div className="h-1/9 flex" style={{ fontSize : 27, alignItems : "center", paddingBottom : 13}}> 
+            {/*This is the results button*/}
+            <div className="h-1/10 flex" style={{ fontSize : 25, alignItems : "center", paddingBottom : 18}}> 
                 <p>Results:&nbsp;</p>
-                <p className="important_text">{numResults}</p>
+                {/*weird style is for red underlined font*/}
+                <p style={{fontFamily: "Arial, Helvetica, sans-serif", fontWeight: "lighter", textDecoration: "underline", color: "#c03000"}}> {numResults} </p>
             </div>
 
             <table className="min-w-0 w-full table-fixed">
