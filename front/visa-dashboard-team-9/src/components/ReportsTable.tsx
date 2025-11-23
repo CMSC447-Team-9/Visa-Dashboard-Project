@@ -49,6 +49,8 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
         })
     )
 
+    var numResults = filteredData.length //finds the number of results after filters are applied
+
     const sortedData = [...filteredData].sort((a, b) => {
         const aValue = a[sortedBy.key];
         const bValue = b[sortedBy.key];
@@ -58,7 +60,14 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
     })
 
     return (
-        <div className="flex-1 min-h-0 overflow-x-auto overflow-y-auto w-full">
+        <div className="flex-1 min-h-0 w-full overflow-x-auto overflow-y-auto">
+
+            {/*This is the results button*/}
+            <div className="h-1/10 flex" style={{ fontSize : 25, alignItems : "center", paddingBottom : 18}}> 
+                <p>Results:&nbsp;</p>
+                {/*weird style is for red underlined font*/}
+                <p style={{fontFamily: "Arial, Helvetica, sans-serif", fontWeight: "lighter", textDecoration: "underline", color: "#c03000"}}> {numResults} </p>
+            </div>
 
             <table className="min-w-0 w-full table-fixed">
                 <thead>
@@ -83,6 +92,7 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
                     ))}
                 </tbody>
             </table>
+            
         </div>
     )
 }
