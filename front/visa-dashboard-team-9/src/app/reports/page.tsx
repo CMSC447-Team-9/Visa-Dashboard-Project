@@ -124,10 +124,10 @@ export default function Reports() {
     return (
         <div className="flex flex-row justify-center w-full h-full p-2 gap-4">
             {/* List of all Visas */}
-            <div className={`flex flex-col w-13/16 h-full p-4 gap-4 ${cardClass2}`}>
+            <div className={`flex flex-col w-13/16 h-full p-4 gap-2 ${cardClass2}`}>
                 {/* Filter component */}
                 <ReportsFilter filterOptions={getUniqueValues(getEntries())} filterBy={filterBy} updateFilter={updateFilter} />
-                <hr />
+                <hr/>
                 {/* Table component */}
                 <ReportsTable data={entries} sortedBy={sortedBy} filterBy={filterBy} setSort={handleSort} />
             </div>

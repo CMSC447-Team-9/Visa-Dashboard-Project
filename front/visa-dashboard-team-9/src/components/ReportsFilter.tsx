@@ -72,7 +72,7 @@ export default function ReportsFilter({ filterOptions, filterBy, updateFilter, c
                                         if (!Array.isArray(selected)) {
                                             const { min, max } = selected as { min?: number; max?: number }
                                             const format = fieldType === "timestamp"
-                                                ? (v: number) => new Date(v).toLocaleDateString()  
+                                                ? (v: number) => new Date(v).toLocaleDateString()
                                                 : (v: number) => v.toString()
 
                                             if (min !== undefined && max !== undefined) return `${format(min)} <-> ${format(max)}`
@@ -121,11 +121,11 @@ export default function ReportsFilter({ filterOptions, filterBy, updateFilter, c
                                                     <div className="flex flex-col gap-2 p-2">
                                                         <div className="">
                                                             <label className="text-sm font-medium w-full">Start Date</label>
-                                                            <input type="date" className="border rounded p-1 w-full" defaultValue={selected && !Array.isArray(selected) && selected.min ? new Date(selected.min).toISOString().slice(0,10) : ""} onChange={e => updateFilter(key, { ...(Array.isArray(selected) ? {} : selected), min: e.target.value ? new Date(e.target.value).getTime() as EmployeeRecord[typeof key] : undefined })} />
+                                                            <input type="date" className="border rounded p-1 w-full" defaultValue={selected && !Array.isArray(selected) && selected.min ? new Date(selected.min).toISOString().slice(0, 10) : ""} onChange={e => updateFilter(key, { ...(Array.isArray(selected) ? {} : selected), min: e.target.value ? new Date(e.target.value).getTime() as EmployeeRecord[typeof key] : undefined })} />
                                                         </div>
                                                         <div className="">
                                                             <label className="text-sm font-medium w-full">End Date</label>
-                                                            <input type="date" className="border rounded p-1 w-full" defaultValue={selected && !Array.isArray(selected) && selected.max ? new Date(selected.max).toISOString().slice(0,10) : ""} onChange={e => updateFilter(key, { ...(Array.isArray(selected) ? {} : selected), max: e.target.value ? new Date(e.target.value).getTime() as EmployeeRecord[typeof key] : undefined })} />
+                                                            <input type="date" className="border rounded p-1 w-full" defaultValue={selected && !Array.isArray(selected) && selected.max ? new Date(selected.max).toISOString().slice(0, 10) : ""} onChange={e => updateFilter(key, { ...(Array.isArray(selected) ? {} : selected), max: e.target.value ? new Date(e.target.value).getTime() as EmployeeRecord[typeof key] : undefined })} />
                                                         </div>
                                                     </div>
                                                 )
@@ -139,13 +139,14 @@ export default function ReportsFilter({ filterOptions, filterBy, updateFilter, c
                         </div>
                     )
                 })}
+                {/* Clear Filters Button */}
+                <div className="flex justify-end">
+                    <button className="border p-2 rounded bg-red-100 text-red-800 hover:bg-red-200 w-1/3" onClick={() => { keys.forEach(key => updateFilter(key, undefined)) }}>
+                        Clear Filters
+                    </button>
+                </div>
             </div>
-            {/* Clear Filters Button */}
-            <div className="flex justify-end">
-                <button className="border p-2 rounded bg-red-100 text-red-800 hover:bg-red-200 w-1/8" onClick={() => { keys.forEach(key => updateFilter(key, undefined)) }}>
-                    Clear Filters
-                </button>
-            </div>
+
         </div>
     )
 }

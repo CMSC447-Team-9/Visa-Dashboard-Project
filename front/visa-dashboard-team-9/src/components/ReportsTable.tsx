@@ -60,13 +60,14 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
     })
 
     return (
-        <div className="flex-1 min-h-0 w-full overflow-x-auto overflow-y-auto">
+        <div className="flex flex-col flex-1 min-h-0 w-full overflow-x-auto overflow-y-auto gap-2 py-1">
 
-            {/*This is the results button*/}
-            <div className="h-1/10 flex" style={{ fontSize : 25, alignItems : "center", paddingBottom : 18}}> 
+            {/*This is the results display*/}
+            <div className="flex text-md items-center">
                 <p>Results:&nbsp;</p>
-                {/*weird style is for red underlined font*/}
-                <p style={{fontFamily: "Arial, Helvetica, sans-serif", fontWeight: "lighter", textDecoration: "underline", color: "#c03000"}}> {numResults} </p>
+                <p className="underline text-[#c03000] font-bold">
+                    {numResults}
+                </p>
             </div>
 
             <table className="min-w-0 w-full table-fixed">
@@ -92,7 +93,7 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
                     ))}
                 </tbody>
             </table>
-            
+
         </div>
     )
 }
