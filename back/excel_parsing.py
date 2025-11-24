@@ -154,9 +154,8 @@ def split_case_type(df):
 
 
 # returns the employee spreadsheet data formatted as a JSON string of employee records
-def get_employee_records():
+def get_employee_records(df):
     # loads the employee data spreadsheet into a DataFrame
-    df = get_excel()
     df = split_case_type(df)
 
     # renaming the columns of the DataFrame
@@ -331,6 +330,14 @@ def get_notes(email, excel):
     #returns concatenation of all current and former general notes based on first and last name as a string
     notes = "\n".join(
     excel[(excel["Employee's UMBC email"] == email)]["General notes"].dropna().astype(str)
+    )
+    return notes
+
+def get_pr_notes(email, excel):
+    #params: email of person getting all notes on, excel sheet is unsorted and contains all current and past visas
+    #returns concatenation of all current and former general notes based on first and last name as a string
+    notes = "\n".join(
+    excel[(excel["Employee's UMBC email"] == email)]["Permanent residency notes"].dropna().astype(str)
     )
     return notes
 
