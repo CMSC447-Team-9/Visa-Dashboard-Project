@@ -63,7 +63,7 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
         <div className="flex flex-col flex-1 min-h-0 w-full overflow-x-auto overflow-y-auto gap-2 py-1">
 
             {/*This is the results display*/}
-            <div className="flex text-md items-center">
+            <div className="flex text-2xl items-center pb-1">
                 <p>Results:&nbsp;</p>
                 <p className="underline text-[#c03000] font-bold">
                     {numResults}
