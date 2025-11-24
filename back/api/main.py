@@ -19,6 +19,35 @@ async def api_upload(file: UploadFile = File(...)):
     excel_file = BytesIO(excel_bytes)
 
     df = excel_parsing.get_excel(excel_file)
+    if not (("Last name" in df.columns) or
+            ("First Name" in df.columns) or
+            ("Employee's UMBC email" in df.columns) or
+            ("Personal email" in df.columns) or
+            ("Filed by" in df.columns) or
+            ("Country of Birth" in df.columns) or
+            ("All Citizenships" in df.columns) or
+            ("Gender" in df.columns) or
+            ("Case type" in df.columns) or
+            ("Permanent residency notes" in df.columns) or
+            ("Dependents" in df.columns) or
+            ("initial H-1B start" in df.columns) or
+            ("Start date" in df.columns) or
+            ("Expiration Date" in df.columns) or
+            ("Prep extension date" in df.columns) or
+            ("Max H period" in df.columns) or
+            ("Document Expiry I-94" in df.columns) or
+            ("General notes" in df.columns) or
+            ("soc code" in df.columns) or
+            ("soc code description" in df.columns) or
+            ("Department" in df.columns) or
+            ("Employee Title" in df.columns) or
+            ("Department Admin" in df.columns) or
+            ("Department Advisor/PI/chair" in df.columns) or
+            ("Annual Salary" in df.columns) or
+            ("Employee Educational Level" in df.columns) or
+            ("Employee Educational Field" in df.columns)):
+        raise HTTPException(status_code=400, detail="Excel file is missing expected columns")
+
     app.state.excel = df
     app.state.current_visas = excel_parsing.current_visas(df)
 
