@@ -49,7 +49,7 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
         })
     )
 
-    var numResults = filteredData.length //finds the number of results after filters are applied
+    const numResults = filteredData.length //finds the number of results after filters are applied
 
     const sortedData = [...filteredData].sort((a, b) => {
         const aValue = a[sortedBy.key];
