@@ -1,17 +1,20 @@
 from io import BytesIO
 import pandas as pd
 import lib.excel_parsing as excel_parsing
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
 import sys
+import os
 from pathlib import Path
+from uuid import uuid4
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-app = FastAPI()
+IS_PROD = os.getenv("ENVIRONMENT", "development") == "production"
 
+app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],   # your Next.js dev server
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -21,7 +24,7 @@ app.state.current_visas: pd.DataFrame | None = None
 
 
 @app.post("/api/upload")
-async def api_upload(file: UploadFile = File(...)):
+async def api_upload( response: Response, file: UploadFile = File(...)):
     if not file.filename.lower().endswith(('.xlsx', '.xls')):
         raise HTTPException(
             status_code=400, detail="File must be .xlsx or .xls")
@@ -62,6 +65,18 @@ async def api_upload(file: UploadFile = File(...)):
 
     app.state.excel = df
     app.state.current_visas = excel_parsing.current_visas(df)
+    
+    # Generates a session id
+    session_id = str(uuid4())
+    response.set_cookie(
+        key="sessionid",
+        value=session_id,
+        max_age=60 * 60,   
+        path="/",          
+        httponly=True,       
+        secure=IS_PROD,          
+        samesite="lax"       
+    )
 
     return {
         "filename": file.filename,
@@ -115,11 +130,23 @@ async def api_dashboard_user(umbc_email: str):
 @app.get("/api/report")
 async def api_report():
     curr_visa = app.state.current_visas
-    all_visa = app.state.excel
-    report_stats = excel_parsing.get_report_stats(curr_visa, all_visa)
-    period_stats = excel_parsing.get_period_stats(curr_visa)
+    active_count = excel_parsing.get_total_live_cases(curr_visa)
+    expiring_count = len(excel_parsing.visas_to_renew(curr_visa))
+    case_type_totals = excel_parsing.get_case_type_totals(curr_visa)
     curr_visa_json = excel_parsing.get_employee_records(curr_visa)
-    return {"current visas": curr_visa_json, "department and gender data": report_stats, "period data": period_stats}
+    return {
+        "status": "success",
+        "active": active_count,
+        "expiring": expiring_count,
+        "visa_types": {
+            "f1":case_type_totals[0],
+            "j1":case_type_totals[1],
+            "h1":case_type_totals[2],
+            "residency":case_type_totals[3],
+        },
+        "entry_count": len(curr_visa_json),
+        "entries": curr_visa_json
+    }
 
 
 @app.post("/api/personal")
@@ -135,5 +162,14 @@ async def api_personal(email: str):
 
 
 @app.post("/api/logout")
-async def api_logout():
-    return {"message": "logout endpoint"}
+async def api_logout(request: Request, response: Response):
+    # Iterate over all cookies sent in the request
+    for cookie_name in request.cookies.keys():
+        response.delete_cookie(
+            key=cookie_name,
+            path="/",            
+            domain=None,       
+            httponly=True,
+            samesite="lax"
+        )
+    return {"message": "Logged out"}

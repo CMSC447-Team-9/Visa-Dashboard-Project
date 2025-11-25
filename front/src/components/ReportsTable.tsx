@@ -103,17 +103,8 @@ const formatCell = (column: keyof EmployeeRecord, value: string | number) => {
     switch (column) {
         case "expirationDate":
             if (value == -1) return 'Not Entered'
-            if (typeof value === "number" && !isNaN(value)) return new Date(value).toLocaleDateString()
             if (typeof value === "string" && value.toLowerCase().startsWith('done')) return 'Done'
-            return value
-
-        case "caseType":
-            if (typeof value != "string") return value
-            if (value.toUpperCase().startsWith('H-1B')) return 'H-1B'
-            if (value.toUpperCase().startsWith('J-1')) return 'J-1'
-            if (value.toUpperCase().startsWith('F-1')) return 'F-1'
-            if (value.toLowerCase() == "permanent residency") return 'Permanent Residency'
-            return value;
+            return new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
 
         case "startDate":
             return new Date(value).toLocaleDateString('en-US')

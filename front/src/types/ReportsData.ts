@@ -1,10 +1,9 @@
 import { EmployeeRecord } from "./EmployeeRecord"
 export type ReportsData = {
     status: string,
-    timestamp: string,
     active: number,
     expiring: number,
-    visaTypes: visaTypes,
+    visa_types: visaTypes,
     entry_count: number,
     entries: EmployeeRecord[]
 }

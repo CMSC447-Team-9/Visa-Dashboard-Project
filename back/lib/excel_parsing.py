@@ -192,9 +192,12 @@ def get_employee_records(df):
 
     # clean up the DataFrame to fill empty cells with empty strings
     clean_df = renamed_df.fillna("")
+    
+    # drop duplicate columns, keep first occurrence
+    clean_df = clean_df.loc[:, ~clean_df.columns.duplicated()]
 
     # return the DataFrame as a JSON string
-    return clean_df.to_json(orient="records", force_ascii=False)
+    return clean_df.to_dict(orient="records")
 
 
 def pending_visas(excel):
