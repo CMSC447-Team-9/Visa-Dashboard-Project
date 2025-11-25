@@ -1,20 +1,31 @@
+from io import BytesIO
+import pandas as pd
+import lib.excel_parsing as excel_parsing
 from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-import excel_parsing
-import pandas as pd
-from io import BytesIO
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],   # your Next.js dev server
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.state.excel: pd.DataFrame | None = None
-app.state.current_visa: pd.DataFrame | None = None
+app.state.current_visas: pd.DataFrame | None = None
+
 
 @app.post("/api/upload")
 async def api_upload(file: UploadFile = File(...)):
     if not file.filename.lower().endswith(('.xlsx', '.xls')):
-        raise HTTPException(status_code=400, detail="File must be .xlsx or .xls")
-    
+        raise HTTPException(
+            status_code=400, detail="File must be .xlsx or .xls")
+
     excel_bytes = await file.read()
     excel_file = BytesIO(excel_bytes)
 
@@ -46,7 +57,8 @@ async def api_upload(file: UploadFile = File(...)):
             ("Annual Salary" in df.columns) or
             ("Employee Educational Level" in df.columns) or
             ("Employee Educational Field" in df.columns)):
-        raise HTTPException(status_code=400, detail="Excel file is missing expected columns")
+        raise HTTPException(
+            status_code=400, detail="Excel file is missing expected columns")
 
     app.state.excel = df
     app.state.current_visas = excel_parsing.current_visas(df)
@@ -57,11 +69,24 @@ async def api_upload(file: UploadFile = File(...)):
         "columns": len(df.columns)
     }
 
+
 @app.get("/api/dashboard")
 async def api_dashboard():
+    if app.state.excel is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Visa data not loaded"
+        )
+    if app.state.current_visas is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Current visa data not processed"
+        )
+
     curr_visa = app.state.current_visas
     all_visa = app.state.excel
-    f1_count, j1_count, h1b_count, pr_count = excel_parsing.get_case_type_totals(curr_visa)
+    f1_count, j1_count, h1b_count, pr_count = excel_parsing.get_case_type_totals(
+        curr_visa)
     total_live_count = excel_parsing.get_total_live_cases(curr_visa)
     renew_visas = excel_parsing.visas_to_renew(curr_visa)
     pending_visas = excel_parsing.pending_visas(all_visa)
@@ -78,9 +103,14 @@ async def api_dashboard():
         "pending visas": pending_visas
     }
 
+
 @app.get("/api/dashboard/{umbc_email}")
 async def api_dashboard_user(umbc_email: str):
+    raise HTTPException(
+        status_code=503, detail="This endpoint is not yet implemented."
+    )
     return {"message": f"dashboard endpoint for {umbc_email}"}
+
 
 @app.get("/api/report")
 async def api_report():
@@ -91,16 +121,18 @@ async def api_report():
     curr_visa_json = excel_parsing.get_employee_records(curr_visa)
     return {"current visas": curr_visa_json, "department and gender data": report_stats, "period data": period_stats}
 
+
 @app.post("/api/personal")
-async def api_personal(email : str):
+async def api_personal(email: str):
     all_visa = app.state.excel
     curr_visa = app.state.excel
     personal_row = app.state.current_visas
-    personal_row = curr_visa[curr_visa["Employee's UMBC email"] ==  email]
+    personal_row = curr_visa[curr_visa["Employee's UMBC email"] == email]
     personal_data = excel_parsing.get_employee_records(personal_row)
     gen_notes = excel_parsing.get_notes(email, all_visa)
     pr_notes = excel_parsing.get_pr_notes(email, all_visa)
     return {"personal visa row": personal_data, "general notes": gen_notes, "pr notes": pr_notes}
+
 
 @app.post("/api/logout")
 async def api_logout():
