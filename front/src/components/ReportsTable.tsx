@@ -68,9 +68,6 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
                 <p className="underline text-[#c03000] font-bold">
                     {numResults}
                 </p>
-                <p className="underline text-[#c03000] font-bold">
-                    {numResults}
-                </p>
             </div>
 
             <table className="min-w-0 w-full table-fixed">
