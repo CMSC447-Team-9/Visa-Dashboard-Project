@@ -3,9 +3,10 @@ import pandas as pd
 # returns excel sheet parsed by pandas
 def get_excel(file):
     excel = pd.read_excel(file)
-    mask = excel["Start date"].map(type) == str
-    excel.loc[mask, "Start date"] = (excel.loc[mask, "Start date"].str.extract(r'(\d{1,2}[/]\d{1,2}[/]\d{2,4})')[0])
-    excel["Start date"] = pd.to_datetime(excel["Start date"], errors='coerce')
+    if ("Start date" in excel.columns):
+        mask = excel["Start date"].map(type) == str
+        excel.loc[mask, "Start date"] = (excel.loc[mask, "Start date"].str.extract(r'(\d{1,2}[/]\d{1,2}[/]\d{2,4})')[0])
+        excel["Start date"] = pd.to_datetime(excel["Start date"], errors='coerce')
     return excel
 
 
