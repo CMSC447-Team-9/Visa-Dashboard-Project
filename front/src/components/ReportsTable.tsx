@@ -49,7 +49,7 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
         })
     )
 
-    var numResults = filteredData.length //finds the number of results after filters are applied
+    const numResults = filteredData.length //finds the number of results after filters are applied
 
     const sortedData = [...filteredData].sort((a, b) => {
         const aValue = a[sortedBy.key];
@@ -60,11 +60,14 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
     })
 
     return (
-        <div className="flex flex-col flex-1 min-h-0 w-full overflow-x-auto overflow-y-auto gap-2 py-1">
+        <div className="flex flex-col flex flex-col flex-1 min-h-0 w-full overflow-x-auto overflow-y-auto gap-2 py-1 gap-2 py-1">
 
             {/*This is the results display*/}
             <div className="flex text-2xl items-center pb-1">
                 <p>Results:&nbsp;</p>
+                <p className="underline text-[#c03000] font-bold">
+                    {numResults}
+                </p>
                 <p className="underline text-[#c03000] font-bold">
                     {numResults}
                 </p>
@@ -94,6 +97,7 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
                 </tbody>
             </table>
 
+
         </div>
     )
 }
@@ -103,17 +107,8 @@ const formatCell = (column: keyof EmployeeRecord, value: string | number) => {
     switch (column) {
         case "expirationDate":
             if (value == -1) return 'Not Entered'
-            if (typeof value === "number" && !isNaN(value)) return new Date(value).toLocaleDateString()
             if (typeof value === "string" && value.toLowerCase().startsWith('done')) return 'Done'
-            return value
-
-        case "caseType":
-            if (typeof value != "string") return value
-            if (value.toUpperCase().startsWith('H-1B')) return 'H-1B'
-            if (value.toUpperCase().startsWith('J-1')) return 'J-1'
-            if (value.toUpperCase().startsWith('F-1')) return 'F-1'
-            if (value.toLowerCase() == "permanent residency") return 'Permanent Residency'
-            return value;
+            return new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
 
         case "startDate":
             return new Date(value).toLocaleDateString('en-US')

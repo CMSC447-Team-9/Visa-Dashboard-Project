@@ -109,7 +109,7 @@ export default function Reports() {
     }
     const getVisaTypes = (): visaTypes => {
         if (!data) return { null: 0 }
-        return data.visaTypes
+        return data.visa_types
     }
     const getEntries = (): EmployeeRecord[] => {
         if (!data) return []

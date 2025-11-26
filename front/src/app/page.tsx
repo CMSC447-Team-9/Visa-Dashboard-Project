@@ -32,6 +32,7 @@ export default function Home() {
             const res = await fetch(UPLOAD_PATH, {
                 method: "POST",
                 body: formData,
+                credentials: "include",
             })
 
             if (!res.ok) {

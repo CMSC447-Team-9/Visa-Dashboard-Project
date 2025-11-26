@@ -1,0 +1,30 @@
+services:
+  back:
+    build:
+      context: ./back
+      dockerfile: Dockerfile.dev
+    container_name: backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back:/app    
+    environment:
+      PYTHONUNBUFFERED: 1
+      ENVIRONMENT: development
+    restart: unless-stopped
+
+  front:
+    build:
+      context: ./front
+      dockerfile: Dockerfile.dev
+    image: cmsc447-team9/visa-dashboard-front:dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./front:/app         
+      - /app/node_modules   
+    environment:
+      NODE_ENV: development
+    depends_on:
+      - back
+    restart: unless-stopped
