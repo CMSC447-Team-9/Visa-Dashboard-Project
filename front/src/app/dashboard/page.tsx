@@ -1,4 +1,5 @@
-
+import umbc_logo from '../../../public/umbc_shield.png'
+import Image from "next/image"
 
 
 export default function Dashboard() {
@@ -11,7 +12,7 @@ export default function Dashboard() {
     -Add reload button on sidebar to manually reload data
     */
 
-    const backgroundClass: string = "rounded-xl border bg-[#B6B7B9]"
+    const backgroundClass: string = "rounded-xl border border-[#464647] bg-[#B6B7B9]"
     const inlineClass: string = "rounded-sm border"
 
     return (
@@ -27,13 +28,14 @@ export default function Dashboard() {
                     {/* top left row */}
                     <div className="flex flex-row gap-4">
 
-                        <div className={`${inlineClass} flex w-4/10 p-2 border text-3xl place-items-center`}>
-                            <h1>Welcome to the Dashboard</h1>
+                        <div className={`flex w-4/10 p-2 place-items-center @container`}>
+                            <Image src={umbc_logo} alt='UMBC Shield Graphic' width={55} height={55}/>
+                            <h1 className='pl-5 text-[39px]'>Dashboard Page</h1>
                         </div>
 
                         <div className={`${backgroundClass} flex flex-col w-6/10 p-3 gap-2 place-items-center`}>
 
-                            <div className={`${inlineClass} flex w-full p-2 border text-3xl place-items-center`}>
+                            <div className={`flex w-full p-2 text-[35px] place-items-center`}>
                                 <p className="">Total Active Visas:&nbsp;</p>
                                 <p className="underline text-[#c03000] font-bold">5</p>
                             </div>
