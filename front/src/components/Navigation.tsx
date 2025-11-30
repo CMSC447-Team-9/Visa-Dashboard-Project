@@ -4,6 +4,7 @@ import { useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import { LucideIcon, Menu, ChevronLeft, LogOut, Home, FileText } from "lucide-react"
+import { LOGOUT_PATH } from "@/types/API_Paths"
 
 
 // Type Definition for NavBar Buttons
@@ -43,7 +44,7 @@ export default function Navigation() {
     const handleLogout = async () => {
         setOpen(false)
         try {
-            const res = await fetch("/api/logout", { method: "POST" });
+            const res = await fetch(LOGOUT_PATH, { method: "POST" });
             if (res.ok) {
                 router.push("/")
             }
@@ -88,7 +89,7 @@ export default function Navigation() {
                             <LogOut />
                         </div>
                         <span className={`transition-all duration-300 overflow-hidden whitespace-nowrap ${isOpen ? "opacity-100 w-auto ml-2" : "opacity-0 w-0"}`}>
-                            Exit
+                            Logout
                         </span>
                     </button>
                 </nav>
