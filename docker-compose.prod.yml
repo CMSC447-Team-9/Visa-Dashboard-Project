@@ -2,7 +2,7 @@ services:
   back:
     build:
       context: ./back
-      dockerfile: Dockerfile  # production Dockerfile
+      dockerfile: Dockerfile
     image: cmsc447-team9/visa-dashboard-back:prod
     container_name: backend
     ports:
@@ -15,7 +15,7 @@ services:
   front:
     build:
       context: ./front
-      dockerfile: Dockerfile  # production Dockerfile
+      dockerfile: Dockerfile
     image: cmsc447-team9/visa-dashboard-front:prod
     container_name: frontend
     ports:
