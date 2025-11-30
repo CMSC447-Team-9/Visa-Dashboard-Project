@@ -8,7 +8,6 @@ import { RecordFilters } from "@/types/RecordFilters"
 import ReportsTable from "@/components/ReportsTable"
 import ReportsFilter from "@/components/ReportsFilter"
 
-const cardClass1: string = "rounded-xl border border-[#A6A7A9] bg-[#B6B7B9] shadow-[0_0_10px_1px_rgba(0,0,0,0.1)]"
 const cardClass2: string = "rounded-xl border border-[#A6A7A9] bg-[#B6B7B9] shadow-[0_0_10px_5px_rgba(0,0,0,0.15)]"
 
 export default function Reports() {
@@ -96,22 +95,11 @@ export default function Reports() {
         )
 
     }
-
-    const getExpiringVisas = (): number => {
-        if (!data) return 0
-        return data.expiring
-    }
-    const getVisaTypes = (): visaTypes => {
-        if (!data) return { null: 0 }
-        return data.visa_types
-    }
     const getEntries = (): EmployeeRecord[] => {
         if (!data) return []
         return data.entries
     }
 
-    const expiring: number = getExpiringVisas()
-    const visaTypes: visaTypes = getVisaTypes()
     const entries: EmployeeRecord[] = getEntries()
 
     // The actual design of the page
