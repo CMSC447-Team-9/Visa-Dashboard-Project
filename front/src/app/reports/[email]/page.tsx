@@ -53,6 +53,7 @@ export default async function DashboardByEmail({ params }: PageProps) {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div className="bg-gray-200 p-3 rounded shadow"><strong>UMBC Email:</strong> {employee.employeeUmbcEmail}</div>
                         <div className="bg-gray-200 p-3 rounded shadow"><strong>Personal Email:</strong> {employee.personalEmail}</div>
+                        <div className="bg-gray-200 p-3 rounded shadow"><strong>Prep Date:</strong> {employee.prepExtensionDate ? new Date(employee.prepExtensionDate).toLocaleDateString() : "N/A"}</div>
                         <div className="bg-gray-200 p-3 rounded shadow"><strong>Visa Expiration Date:</strong> {employee.expirationDate ? new Date(employee.expirationDate).toLocaleDateString() : "N/A"}</div>
                         <div className="bg-gray-200 p-3 rounded shadow"><strong>Country of Birth:</strong> {employee.countryOfBirth}</div>
                         <div className="bg-gray-200 p-3 rounded shadow"><strong>College:</strong> {employee.college}</div>
@@ -78,12 +79,14 @@ export default async function DashboardByEmail({ params }: PageProps) {
             <div className={`flex-grow overflow-auto max-h-screen border rounded p-2 min-w-0 ${cardClass}`}>
                 <table className="table-auto w-full border-collapse">
                     <tbody>
-                        {Object.entries(employee).map(([key, value]) => (
-                            <tr key={key} className="hover:bg-gray-100">
-                                <td className="border px-2 py-1 font-semibold break-words">{key}</td>
-                                <td className="border px-2 py-1 break-words">{value ? value.toString() : "N/A"}</td>
-                            </tr>
-                        ))}
+                        {Object.entries(employee)
+                            .filter(([key]) => !["permanentResidencyNotes", "generalNotes", "prNotes"].includes(key))
+                            .map(([key, value]) => (
+                                <tr key={key} className="hover:bg-gray-100">
+                                    <td className="border px-2 py-1 font-semibold break-words">{key}</td>
+                                    <td className="border px-2 py-1 break-words">{value ? value.toString() : "N/A"}</td>
+                                </tr>
+                            ))}
                     </tbody>
                 </table>
             </div>
