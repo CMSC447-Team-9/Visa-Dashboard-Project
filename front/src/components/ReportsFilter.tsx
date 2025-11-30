@@ -139,12 +139,12 @@ export default function ReportsFilter({ filterOptions, filterBy, updateFilter, c
                         </div>
                     )
                 })}
-                {/* Clear Filters Button */}
-                <div className="flex justify-end">
-                    <button className="border p-2 rounded bg-red-100 text-red-800 hover:bg-red-200 w-1/3" onClick={() => { keys.forEach(key => updateFilter(key, undefined)) }}>
-                        Clear Filters
-                    </button>
-                </div>
+            </div>
+            {/* Clear Filters Button */}
+            <div className="flex justify-end">
+                <button className="border p-2 rounded bg-red-100 text-red-800 hover:bg-red-200 w-1/4" onClick={() => { keys.forEach(key => updateFilter(key, undefined)) }}>
+                    Clear Filters
+                </button>
             </div>
 
         </div>

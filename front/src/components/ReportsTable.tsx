@@ -1,5 +1,7 @@
+import Link from "next/link"
 import { EmployeeRecord } from "@/types/EmployeeRecord"
 import { RecordFilters } from "@/types/RecordFilters"
+import ReportsTableRow from "./ReportsTableRow"
 
 // To show/hide a column, just add a header corresponding to that column
 export const columnLabels: Partial<Record<keyof EmployeeRecord, string>> = {
@@ -11,6 +13,7 @@ export const columnLabels: Partial<Record<keyof EmployeeRecord, string>> = {
     countryOfBirth: "Birth Country",
     caseType: "Visa Type",
     department: "Department",
+    college: "College",
 }
 
 type ReportsTableProps = {
@@ -83,34 +86,11 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
                 </thead>
                 <tbody>
                     {sortedData.map((row, i) => (
-                        <tr key={i} className="border-t hover:bg-[#c7c8ca]">
-                            {columnKeys.map(column => (
-                                <td key={column} className="border px-2 py-2 text-center break-words">
-                                    {formatCell(column, row[column])}
-                                </td>
-                            ))}
-                        </tr>
+                        <ReportsTableRow key={i} row={row} columnKeys={columnKeys} />
                     ))}
                 </tbody>
             </table>
 
         </div>
     )
-}
-
-const formatCell = (column: keyof EmployeeRecord, value: string | number) => {
-    if (!value) return "Not Entered"
-    switch (column) {
-        case "expirationDate":
-            if (value == -1) return 'Not Entered'
-            if (typeof value === "string" && value.toLowerCase().startsWith('done')) return 'Done'
-            return new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
-
-        case "startDate":
-            return new Date(value).toLocaleDateString('en-US')
-
-        default:
-            return value?.toString()
-    }
-
 }
