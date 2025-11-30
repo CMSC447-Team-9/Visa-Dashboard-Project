@@ -1,5 +1,9 @@
 import umbc_logo from '../../../public/umbc_shield.png'
 import Image from "next/image"
+import UpcomingCases from '@/components/UpcomingCases'
+import CaseNumbers from '@/components/CaseNumbers'
+import IndividualFocus from '@/components/IndividualFocus'
+import CasesPerYear from '@/components/CasesPerYear'
 
 
 export default function Dashboard() {
@@ -48,7 +52,7 @@ export default function Dashboard() {
                     <div className={`${backgroundClass} flex flex-col p-3 gap-2 grow place-items-center`}>
 
                         <div className={`${inlineClass} flex grow w-full place-items-center border`}>
-                            <p>Upcoming Cases</p>
+                            {UpcomingCases()}
                         </div>
                     </div> 
 
@@ -56,17 +60,17 @@ export default function Dashboard() {
                 
                 {/* top right side */}
                 <div className={`${backgroundClass} p-4 w-3/10 content-center text-center`}>
-                    <p>Case Numbers</p>
+                    {CaseNumbers()}
                 </div>
             </div>
 
             {/* bottom row */}
             <div className="flex flex-row gap-4 h-3/8">
                 <div className={`${backgroundClass} p-4 w-7/10 content-center text-center`}>
-                    <p>Cases Per Year</p>
+                    {CasesPerYear()}
                 </div>
                 <div className={`${backgroundClass} p-4 w-3/10 content-center text-center`}>
-                    <p>Individual Focus</p>
+                    {IndividualFocus()}
                 </div>
             </div>
         </div>
