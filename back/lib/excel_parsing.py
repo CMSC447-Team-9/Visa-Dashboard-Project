@@ -46,28 +46,28 @@ def visas_to_renew(excel):
             continue
         if pd.isna(row["clean exp date"]):
             renew_list.append({
-                "Last name": row["Last name"],
-                "First name": row["First Name"],
-                "Case type": row["Case type"],
-                "Expiration date": "Unknown",
+                "last_name": row["Last name"],
+                "first_name": row["First Name"],
+                "case_type": row["Case type"],
+                "expiration_date": "Unknown",
             })
         case_type = str(row["Case type"])
         if ("H-1B" in case_type) or ("J-1" in case_type):
             if((row["clean exp date"] - today).days <= 180):
                 renew_list.append({
-                        "Last name": row["Last name"],
-                        "First name": row["First Name"],
-                        "Case type": row["Case type"],
-                        "Expiration date": str((row["clean exp date"].date())),
+                        "last_name": row["Last name"],
+                        "first_name": row["First Name"],
+                        "case_type": row["Case type"],
+                        "expiration_date": str((row["clean exp date"].date())),
                     })
             continue
         if ("F-1" in case_type):
             if((row["clean exp date"] - today).days <= 365):
                 renew_list.append({
-                        "Last name": row["Last name"],
-                        "First name": row["First Name"],
-                        "Case type": row["Case type"],
-                        "Expiration date": str((row["clean exp date"].date())),
+                        "last_name": row["Last name"],
+                        "first_name": row["First Name"],
+                        "case_type": row["Case type"],
+                        "expiration_date": str((row["clean exp date"].date())),
                     })
 
     return renew_list
@@ -208,10 +208,10 @@ def pending_visas(excel):
     pending_list = []
     for _, row in excel_pending.iterrows():
         pending_list.append({
-            "Last name": row["Last name"],
-            "First name": row["First Name"],
-            "Case type": row["Case type"],
-            "Expiration date": "Unknown",
+            "last_name": row["Last name"],
+            "first_name": row["First Name"],
+            "case_type": row["Case type"],
+            "expiration_date": "Unknown",
         })
     return pending_list
 

@@ -137,15 +137,15 @@ async def api_dashboard():
     pending_visas = excel_parsing.pending_visas(all_visa)
 
     return {
-        "case data": {
-            "total F-1 cases": f1_count,
-            "total J-1 cases": j1_count,
-            "total H-1B cases": h1b_count,
-            "total Permanent Residency cases": pr_count,
-            "total live cases": total_live_count,
+        "case_data": {
+            "total_F-1": f1_count,
+            "total_J-1": j1_count,
+            "total_H-1B": h1b_count,
+            "total_Residency": pr_count,
+            "total_live": total_live_count,
         },
-        "renew visas": renew_visas,
-        "pending visas": pending_visas
+        "renew_visas": renew_visas,
+        "pending_visas": pending_visas
     }
 
 
