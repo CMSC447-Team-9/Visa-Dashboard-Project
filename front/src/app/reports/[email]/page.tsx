@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 interface PageProps {
-    params: { email: string };
+    params: Promise<{ email: string }>
 }
 
 interface DashboardResponse {
