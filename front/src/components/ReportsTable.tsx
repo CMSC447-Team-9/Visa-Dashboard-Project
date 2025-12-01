@@ -62,33 +62,32 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
     })
 
     return (
-        <div className="flex flex-col flex-1 min-h-0 w-full overflow-x-auto overflow-y-auto gap-2 py-1">
+        <div className="flex flex-col flex flex-col flex-1 min-h-0 w-full overflow-x-auto overflow-y-auto gap-2 py-1 gap-2 py-1">
 
             {/*This is the results display*/}
-            <div className="flex text-md items-center">
+            <div className="flex text-2xl items-center pb-1">
                 <p>Results:&nbsp;</p>
                 <p className="underline text-[#c03000] font-bold">
                     {numResults}
                 </p>
             </div>
 
-            <table className="min-w-0 w-full table-fixed">
+            <table className="w-full table-fixed border-collapse text-sm rounded-xl overflow-hidden shadow-md">
                 <thead>
-                    <tr>
-                        {columnKeys.map(key => (
-                            <th key={key} className="border px-2 py-2 cursor-pointer hover:bg-gray-100 break-words select-none" onClick={() => setSort(key)}>
-                                {columnLabels[key]}
-                                {sortedBy.key === key ? (sortedBy.direction === "asc" ? " ↑" : " ↓") : ""}
-                            </th>
-                        ))}
+                    <tr className="bg-gray-200 border-b shadow-sm">
+                        {columnKeys.map(key =>
+                            <th key={key} onClick={() => setSort(key)} className="px-3 py-3 font-semibold cursor-pointer select-none hover:bg-gray-100">
+                                {columnLabels[key]} {sortedBy.key === key && <span>{sortedBy.direction === "asc" ? "↑" : "↓"}
+                                </span>}
+                            </th>)}
                     </tr>
                 </thead>
-                <tbody>
-                    {sortedData.map((row, i) => (
-                        <ReportsTableRow key={i} row={row} columnKeys={columnKeys} />
-                    ))}
+                <tbody className="divide-y divide-gray-400">
+                    {sortedData.map((row, i) => <ReportsTableRow key={i} row={row} columnKeys={columnKeys} index={i} />)}
                 </tbody>
             </table>
+
+
 
         </div>
     )

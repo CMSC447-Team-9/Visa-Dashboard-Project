@@ -85,6 +85,34 @@ async def api_upload(response: Response, file: UploadFile = File(...)):
         "columns": len(df.columns)
     }
 
+@app.get("/api/test")
+async def api_test():
+    if app.state.excel is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Visa data not loaded"
+        )
+    if app.state.current_visas is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Current visa data not processed"
+        )
+
+    excel_sheet = app.state.excel
+    curr_visas = app.state.current_visas
+
+    total_renew = excel_parsing.visas_to_renew(curr_visas) #list of dictionaies with all people
+
+    i = 0
+    for employee_data in total_renew:
+        i += 1
+
+    total_live_count = excel_parsing.get_total_live_cases(excel_sheet)
+    return {
+
+        "total_live": total_live_count,
+        "renew_visas": total_renew
+    }
 
 @app.get("/api/dashboard")
 async def api_dashboard():
@@ -102,21 +130,23 @@ async def api_dashboard():
     curr_visa = app.state.current_visas
     all_visa = app.state.excel
     f1_count, j1_count, h1b_count, pr_count = excel_parsing.get_case_type_totals(
-        curr_visa)
+        all_visa)
     total_live_count = excel_parsing.get_total_live_cases(curr_visa)
     renew_visas = excel_parsing.visas_to_renew(curr_visa)
     pending_visas = excel_parsing.pending_visas(all_visa)
+    stats = excel_parsing.get_period_stats(curr_visa)
 
     return {
-        "case data": {
-            "total F-1 cases": f1_count,
-            "total J-1 cases": j1_count,
-            "total H-1B cases": h1b_count,
-            "total Permanent Residency cases": pr_count,
-            "total live cases": total_live_count,
+        "case_data": {
+            "total_F-1": f1_count,
+            "total_J-1": j1_count,
+            "total_H-1B": h1b_count,
+            "total_Residency": pr_count,
+            "total_live": total_live_count,
         },
-        "renew visas": renew_visas,
-        "pending visas": pending_visas
+        "renew_visas": renew_visas,
+        "pending_visas": pending_visas,
+        "stats": stats
     }
 
 

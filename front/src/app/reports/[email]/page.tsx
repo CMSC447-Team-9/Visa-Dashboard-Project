@@ -1,7 +1,6 @@
+import IndividualBackButton from "@/components/IndividualBackButton";
 import { INDIVIDUAL_PATH } from "@/types/API_Paths";
 import { EmployeeRecord, RecordTypes, ColumnLabels } from "@/types/EmployeeRecord";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 
 interface PageProps {
     params: Promise<{ email: string }>
@@ -16,7 +15,7 @@ interface IndividualData {
 const cardClass: string = "rounded-xl border border-[#C8C9CB] bg-[#D8D9DB] shadow-[0_0_10px_5px_rgba(0,0,0,0.15)]"
 
 
-export default async function DashboardByEmail({ params }: PageProps) {
+export default async function ReportByEmail({ params }: PageProps) {
     const { email } = await params;
     const encodedEmail = encodeURIComponent(email);
 
@@ -42,10 +41,8 @@ export default async function DashboardByEmail({ params }: PageProps) {
             <div className="w-3/4">
                 <div className={`${cardClass} flex flex-col h-full w-full p-4 gap-2`}>
                     {/* Back Button + Title */}
-                    <div className="flex items-center gap-2 mb-4 w-full">
-                        <Link href="/reports" className="flex items-center gap-1 text-gray-700 hover:text-gray-900">
-                            <ArrowLeft size={20} />
-                        </Link>
+                    <div className="flex items-center gap-2 my-4 w-full">
+                        <IndividualBackButton/>
                         <h1 className="text-2xl font-bold ml-2">{employee.firstName} {employee.lastName}</h1>
                     </div>
 
@@ -62,13 +59,13 @@ export default async function DashboardByEmail({ params }: PageProps) {
                     </div>
 
                     {/* General Notes */}
-                    <div className="mt-6">
+                    <div className="mt-6 ml-2">
                         <h2 className="text-xl font-semibold mb-2">General Notes</h2>
                         <p>{data["general_notes"] || "No general notes"}</p>
                     </div>
 
                     {/* PR Notes */}
-                    <div className="mt-4">
+                    <div className="mt-4 ml-2">
                         <h2 className="text-xl font-semibold mb-2">PR Notes</h2>
                         <p>{data["pr_notes"] || "No PR notes"}</p>
                     </div>

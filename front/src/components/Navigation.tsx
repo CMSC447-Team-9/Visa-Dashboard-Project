@@ -89,7 +89,7 @@ export default function Navigation() {
                             <LogOut />
                         </div>
                         <span className={`transition-all duration-300 overflow-hidden whitespace-nowrap ${isOpen ? "opacity-100 w-auto ml-2" : "opacity-0 w-0"}`}>
-                            Exit
+                            Logout
                         </span>
                     </button>
                 </nav>
