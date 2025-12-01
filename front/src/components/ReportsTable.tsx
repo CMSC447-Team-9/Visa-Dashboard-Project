@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { EmployeeRecord } from "@/types/EmployeeRecord"
 import { RecordFilters } from "@/types/RecordFilters"
 import ReportsTableRow from "./ReportsTableRow"

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ReportsData, visaTypes } from "@/types/ReportsData"
+import { ReportsData } from "@/types/ReportsData"
 import { EmployeeRecord } from "@/types/EmployeeRecord"
 import { REPORTS_PATH } from "@/types/API_Paths"
 import { RecordFilters } from "@/types/RecordFilters"
