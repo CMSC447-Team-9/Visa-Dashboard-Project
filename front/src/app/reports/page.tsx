@@ -8,7 +8,7 @@ import { RecordFilters } from "@/types/RecordFilters"
 import ReportsTable from "@/components/ReportsTable"
 import ReportsFilter from "@/components/ReportsFilter"
 
-const cardClass2: string = "rounded-xl border border-[#A6A7A9] bg-[#B6B7B9] shadow-[0_0_10px_5px_rgba(0,0,0,0.15)]"
+const cardClass2: string = "rounded-xl border border-[#C8C9CB] bg-[#D8D9DB] shadow-[0_0_10px_5px_rgba(0,0,0,0.15)]"
 
 export default function Reports() {
     /* 

@@ -54,7 +54,7 @@ export default function Home() {
                 <Image src="/umbc_logo.png" alt="UMBC Logo" className="object-contain" fill sizes="50vw" priority />
             </div>
             <div className="flex flex-1 items-center justify-center w-full">
-                <div className="flex flex-col items-center gap-4 justify-center rounded-xl border border-[#A6A7A9] w-3/4 h-3/4 bg-[#B6B7B9]
+                <div className="flex flex-col items-center gap-4 justify-center rounded-xl border border-[#C8C9CB] w-3/4 h-3/4 bg-[#D8D9DB]
                 shadow-[0_0_10px_5px_rgba(0,0,0,0.15)] cursor-pointer" onClick={handleClick}>
                     <Upload className="w-12 h-12 text-gray-700" />
                     <span className="text-gray-700">{uploadStatus}</span>

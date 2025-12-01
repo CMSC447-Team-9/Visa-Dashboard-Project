@@ -63,3 +63,35 @@ export const RecordTypes: Record<keyof EmployeeRecord, "string" | "number" | "ti
   employeeEducationalField: "string",
   college: "string"
 }
+
+export const ColumnLabels: Record<keyof EmployeeRecord, string> = {
+  lastName: "Last Name",
+  firstName: "First Name",
+  employeeUmbcEmail: "UMBC Email",
+  personalEmail: "Personal Email",
+  filedBy: "Filed By",
+  countryOfBirth: "Country of Birth",
+  allCitizenships: "Citizenships",
+  gender: "Gender",
+  caseType: "Case Type",
+  caseTypeExtension: "Case Type Extension",
+  permanentResidencyNotes: "Permanent Residency Notes",
+  dependents: "Number of Dependents",
+  initialH1bStart: "Initial H-1B Start Date",
+  startDate: "Start Date",
+  expirationDate: "Expiration Date",
+  prepExtensionDate: "Preparation Date",
+  maxHPeriod: "Maximum H Period",
+  documentExpiryI94: "I-94 Document Expiry",
+  generalNotes: "General Notes",
+  socCode: "SOC Code",
+  socCodeDescription: "SOC Code Description",
+  department: "Department",
+  employeeTitle: "Job Title",
+  departmentAdmin: "Department Admin",
+  departmentAdvisorPiChair: "Department Advisor / PI / Chair",
+  annualSalary: "Annual Salary",
+  employeeEducationalLevel: "Education Level",
+  employeeEducationalField: "Field of Study",
+  college: "College"
+}
