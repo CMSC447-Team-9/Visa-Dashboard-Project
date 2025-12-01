@@ -1,14 +1,15 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { DashboardData } from "@/types/DashboardData"
+import { DashboardData, RenewData } from "@/types/DashboardData"
 import { DASHBOARD_PATH, TEST_PATH} from "@/types/API_Paths"
 import umbc_logo from '../../../public/umbc_shield.png'
 import Image from "next/image"
-import UpcomingCases from '@/components/UpcomingCases'
+import UpcomingCasesTable from '@/components/UpcomingCasesTable'
 import CaseNumbers from '@/components/CaseNumbers'
 import IndividualFocus from '@/components/IndividualFocus'
 import CasesPerYear from '@/components/CasesPerYear'
+import { deflateRawSync } from "zlib"
 
 
 export default function Dashboard() {
@@ -38,6 +39,7 @@ export default function Dashboard() {
         fetchData()
     }, [])
 
+    const total_active = data?.total_live
 
     const backgroundClass: string = "rounded-xl border border-[#464647] bg-[#B6B7B9]"
     const inlineClass: string = "rounded-sm border"
@@ -64,7 +66,7 @@ export default function Dashboard() {
 
                             <div className={`flex w-full p-2 text-[35px] place-items-center`}>
                                 <p className="">Total Active Visas:&nbsp;</p>
-                                <p className="underline text-[#c03000] font-bold">{data?.total_live}</p>
+                                <p className="underline text-[#c03000] font-bold">{total_active}</p>
                             </div>
 
                         </div>
@@ -75,7 +77,7 @@ export default function Dashboard() {
                     <div className={`${backgroundClass} flex flex-col p-3 gap-2 grow place-items-center`}>
 
                         <div className={`${inlineClass} flex grow w-full place-items-center border`}>
-                            {UpcomingCases()}
+                            {UpcomingCasesTable(data?.renew_visas)}
                         </div>
                     </div> 
 

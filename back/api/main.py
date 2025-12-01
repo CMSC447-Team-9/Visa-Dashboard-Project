@@ -98,12 +98,21 @@ async def api_test():
             detail="Current visa data not processed"
         )
 
-    curr_visa = app.state.excel
+    excel_sheet = app.state.excel
+    curr_visas = app.state.current_visas
 
-    total_live_count = excel_parsing.get_total_live_cases(curr_visa)
+    total_renew = excel_parsing.visas_to_renew(curr_visas) #list of dictionaies with all people
+
+    i = 0
+    for employee_data in total_renew:
+        print(i)
+        i += 1
+
+    total_live_count = excel_parsing.get_total_live_cases(excel_sheet)
     return {
 
-        "total_live": total_live_count
+        "total_live": total_live_count,
+        "renew_visas": total_renew
     }
 
 @app.get("/api/dashboard")
