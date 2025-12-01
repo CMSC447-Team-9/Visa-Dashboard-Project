@@ -135,6 +135,7 @@ async def api_dashboard():
     total_live_count = excel_parsing.get_total_live_cases(curr_visa)
     renew_visas = excel_parsing.visas_to_renew(curr_visa)
     pending_visas = excel_parsing.pending_visas(all_visa)
+    stats = excel_parsing.get_period_stats(curr_visa)
 
     return {
         "case_data": {
@@ -145,7 +146,8 @@ async def api_dashboard():
             "total_live": total_live_count,
         },
         "renew_visas": renew_visas,
-        "pending_visas": pending_visas
+        "pending_visas": pending_visas,
+        "stats": stats
     }
 
 
