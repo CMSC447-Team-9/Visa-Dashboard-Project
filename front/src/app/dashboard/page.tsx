@@ -20,12 +20,13 @@ const cardClass: string = "rounded-xl border border-[#C8C9CB] bg-[#D8D9DB] shado
 export default async function Dashboard() {
     let data: DashboardData;
     try {
-        const res = await fetch(`${DASHBOARD_PATH}`);
+        console.log(`Dashboard Path: ${DASHBOARD_PATH}`)
+        const res = await fetch(`${DASHBOARD_PATH}`, { cache: 'no-store' });
         if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
         data = await res.json();
     } catch (err) {
         console.error(err);
-        return <div><h1>Could not fetch data</h1></div>;
+        return <div><h1>Could not fetch data from {DASHBOARD_PATH}</h1></div>;
     }
     const renewableVisas: VisaData[] = data.renew_visas
     const pendingVisas: VisaData[] = data.pending_visas

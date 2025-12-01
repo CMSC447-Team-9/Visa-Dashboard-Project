@@ -105,7 +105,6 @@ async def api_test():
 
     i = 0
     for employee_data in total_renew:
-        print(i)
         i += 1
 
     total_live_count = excel_parsing.get_total_live_cases(excel_sheet)
