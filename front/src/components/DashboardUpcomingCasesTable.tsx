@@ -1,7 +1,6 @@
-// /components/UpcomingCasesTable.tsx
 import { VisaData } from "@/types/DashboardData"
 
-const thClass = "px-3 py-3 font-semibold cursor-pointer select-none hover:bg-gray-100"
+const thClass = "px-3 py-3 font-semibold select-none hover:bg-gray-100"
 const tdClass = "px-3 py-2 text-center break-words text-[15px]"
 
 export default function UpcomingCasesTable({ visas }: { visas?: VisaData[] }) {
@@ -11,7 +10,6 @@ export default function UpcomingCasesTable({ visas }: { visas?: VisaData[] }) {
     return (
         <>
             <h2 className="text-2xl underline mb-2">Upcoming Cases</h2>
-
             <table className="w-full table-fixed border-collapse text-sm rounded-xl overflow-hidden shadow-md">
                 <thead>
                     <tr className="bg-gray-200 border-b">
@@ -22,8 +20,8 @@ export default function UpcomingCasesTable({ visas }: { visas?: VisaData[] }) {
                 </thead>
                 <tbody className="divide-y divide-gray-400">
                     {visas.map((v, i) => (
-                        <tr key={i} className={`${i % 2 === 0 ? "bg-gray-100" : "bg-gray-200"} cursor-pointer hover:bg-gray-300 transition`}>
-                            <td className={tdClass}>{v.last_name}, {v.first_name}</td>
+                        <tr key={i} className={`${i % 2 === 0 ? "bg-gray-100" : "bg-gray-200"} hover:bg-gray-300 transition`}>
+                            <td className={tdClass}>{v.first_name} {v.last_name}</td>
                             <td className={tdClass}>{v.case_type}</td>
                             <td className={tdClass}>{v.expiration_date}</td>
                         </tr>

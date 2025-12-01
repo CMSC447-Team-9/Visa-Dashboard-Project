@@ -1,11 +1,12 @@
-import { DashboardData, VisaData } from "@/types/DashboardData"
+import { DashboardData, Stats, VisaData } from "@/types/DashboardData"
 import { DASHBOARD_PATH } from "@/types/API_Paths"
 import umbc_logo from '../../../public/umbc_shield.png'
 import Image from "next/image"
-import UpcomingCasesTable from '@/components/UpcomingCasesTable'
-import CaseNumbers from '@/components/CaseNumbers'
-import IndividualFocus from '@/components/IndividualFocus'
-import CasesPerYear from '@/components/CasesPerYear'
+import UpcomingCasesTable from '@/components/DashboardUpcomingCasesTable'
+import CaseNumbers from '@/components/DashboardCaseNumbers'
+import IndividualFocus from '@/components/DashboardIndividualFocus'
+import CasesPerYear from '@/components/DashboardCasesPerYear'
+import PendingCasesTable from "@/components/PendingCasesTable"
 
 const cardClass: string = "rounded-xl border border-[#C8C9CB] bg-[#D8D9DB] shadow-[0_0_10px_5px_rgba(0,0,0,0.15)]"
 
@@ -30,11 +31,12 @@ export default async function Dashboard() {
     const pendingVisas: VisaData[] = data.pending_visas
     const caseData = data.case_data
     const totalActive: number = caseData.total_live
+    const stats: Stats = data.stats
 
     return (
         <div className="flex flex-col w-full h-full gap-4">
             {/* top row */}
-            <div className="flex flex-row gap-4 h-5/8">
+            <div className="flex flex-row gap-4 flex-1">
                 {/* left side */}
                 <div className="flex flex-col gap-4 w-7/10">
                     {/* top left row */}
@@ -60,18 +62,19 @@ export default async function Dashboard() {
                 </div>
 
                 {/* top right side */}
-                <div className={`${cardClass} p-4 w-3/10 content-center text-center`}>
-                    <CaseNumbers data={caseData} />
+                <div className={`${cardClass} p-3 text-center flex-1`}>
+                    <IndividualFocus visas={renewableVisas} />
                 </div>
             </div>
 
             {/* bottom row */}
-            <div className="flex flex-row gap-4 h-3/8">
-                <div className={`${cardClass} p-4 w-7/10 text-center`}>
-                    <CasesPerYear visas={renewableVisas} />
+            <div className="flex flex-row gap-4">
+                <div className={`${cardClass} p-4 text-center flex-1`}>
+                    <PendingCasesTable visas={pendingVisas} />
                 </div>
-                <div className={`${cardClass} p-4 w-3/10 content-center text-center`}>
-                    <IndividualFocus visa={pendingVisas?.[0]} />
+                <div className={`${cardClass} flex flex-col gap-4 p-4 w-3/10 text-center justify-between`}>
+                    <CaseNumbers data={caseData} />
+                    <CasesPerYear stats={stats} />
                 </div>
             </div>
         </div>
