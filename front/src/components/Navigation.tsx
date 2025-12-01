@@ -17,11 +17,11 @@ type NavButton = {
 // Groups of buttons for specific pages
 const groups: Record<string, NavButton[]> = {
     reports: [
-        { name: "Home", href: "/dashboard", icon: Home },
+        { name: "Dashboard", href: "/dashboard", icon: Home },
         { name: "Reports", href: "/reports", icon: FileText },
     ],
     dashboard: [
-        { name: "Home", href: "/dashboard", icon: Home },
+        { name: "Dashboard", href: "/dashboard", icon: Home },
         { name: "Reports", href: "/reports", icon: FileText },
     ]
 }

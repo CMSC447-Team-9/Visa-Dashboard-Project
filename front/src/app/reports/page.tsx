@@ -8,8 +8,7 @@ import { RecordFilters } from "@/types/RecordFilters"
 import ReportsTable from "@/components/ReportsTable"
 import ReportsFilter from "@/components/ReportsFilter"
 
-const cardClass1: string = "rounded-xl border border-[#464647] bg-[#B6B7B9] "
-const cardClass2: string = "rounded-xl border border-[#464647] bg-[#B6B7B9] "
+const cardClass2: string = "rounded-xl border border-[#A6A7A9] bg-[#B6B7B9] shadow-[0_0_10px_5px_rgba(0,0,0,0.15)]"
 
 export default function Reports() {
     /* 
@@ -96,82 +95,23 @@ export default function Reports() {
         )
 
     }
-
-
-    // Simple Getters
-    const getActiveVisas = (): number => {
-        if (!data) return 0
-        return data.active
-    }
-    const getExpiringVisas = (): number => {
-        if (!data) return 0
-        return data.expiring
-    }
-    const getVisaTypes = (): visaTypes => {
-        if (!data) return { null: 0 }
-        return data.visa_types
-    }
     const getEntries = (): EmployeeRecord[] => {
         if (!data) return []
         return data.entries
     }
 
-    const expiring: number = getExpiringVisas()
-    const visaTypes: visaTypes = getVisaTypes()
     const entries: EmployeeRecord[] = getEntries()
 
     // The actual design of the page
     return (
         <div className="flex flex-row justify-center w-full h-full p-2 gap-4">
             {/* List of all Visas */}
-            <div className={`flex flex-col w-13/16 h-full p-4 gap-2 ${cardClass2}`}>
+            <div className={`flex flex-col h-full p-4 gap-2 ${cardClass2}`}>
                 {/* Filter component */}
                 <ReportsFilter filterOptions={getUniqueValues(getEntries())} filterBy={filterBy} updateFilter={updateFilter} />
                 <hr/>
                 {/* Table component */}
                 <ReportsTable data={entries} sortedBy={sortedBy} filterBy={filterBy} setSort={handleSort} />
-            </div>
-
-            {/* Summary of Visas */}
-            <div className={`flex-1 flex flex-col h-full items-center gap-2`}>
-
-                {/* Active Visas */}
-                <div className={`flex flex-col w-full h-1/6 ${cardClass1} p-4 items-center cursor-pointer`} onClick={() => []}>
-                    <span className="text-xl mb-2">
-                        Active Visas:
-                    </span>
-
-                    <span className="flex-1 flex items-center justify-center w-full text-4xl font-bold ">
-                        {getActiveVisas()}
-                    </span>
-                </div>
-
-                {/* Expiring Visas */}
-                <div className={`flex flex-col w-full h-1/6 ${cardClass1} p-4 items-center cursor-pointer`} onClick={() => handleSort("expirationDate")}>
-                    <span className="text-xl mb-2">
-                        Expiring Visas:
-                    </span>
-
-                    <span className={`flex-1 flex items-center justify-center w-full text-4xl font-bold ${expiring > 0 ? "text-red-600" : "text-green-600"}`}>
-                        {expiring}
-                    </span>
-                </div>
-
-                {/* Sum by Visa Types */}
-                <div className={`flex-1 flex flex-col w-full ${cardClass1} p-4 items-center`}>
-                    <span className="text-xl mb-2">
-                        Visas by Type:
-                    </span>
-                    <span className="flex-1 flex flex-col items-center justify-evenly w-full text-2xl text-center gap-4">
-                        {Object.entries(visaTypes).map(([label, value]) => (
-                            <span key={label} className="flex flex-col flex-1 items-center justify-center border w-full rounded-xl cursor-pointer" onClick={() => { updateFilter("caseType", [label]) }}>
-                                <span className="font-semibold">{label.toUpperCase()}:</span>
-                                <span>{value}</span>
-                            </span>
-                        ))}
-                    </span>
-                </div>
-
             </div>
 
         </div>

@@ -7,6 +7,7 @@ import sys
 import os
 from pathlib import Path
 from uuid import uuid4
+from urllib.parse import unquote
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 IS_PROD = os.getenv("ENVIRONMENT", "development") == "production"
@@ -24,7 +25,7 @@ app.state.current_visas: pd.DataFrame | None = None
 
 
 @app.post("/api/upload")
-async def api_upload( response: Response, file: UploadFile = File(...)):
+async def api_upload(response: Response, file: UploadFile = File(...)):
     if not file.filename.lower().endswith(('.xlsx', '.xls')):
         raise HTTPException(
             status_code=400, detail="File must be .xlsx or .xls")
@@ -65,17 +66,17 @@ async def api_upload( response: Response, file: UploadFile = File(...)):
 
     app.state.excel = df
     app.state.current_visas = excel_parsing.current_visas(df)
-    
+
     # Generates a session id
     session_id = str(uuid4())
     response.set_cookie(
         key="sessionid",
         value=session_id,
-        max_age=60 * 60,   
-        path="/",          
-        httponly=True,       
-        secure=IS_PROD,          
-        samesite="lax"       
+        max_age=60 * 60,
+        path="/",
+        httponly=True,
+        secure=IS_PROD,
+        samesite="lax"
     )
 
     return {
@@ -139,34 +140,34 @@ async def api_dashboard():
     }
 
 
-@app.get("/api/dashboard/{umbc_email}")
-async def api_dashboard_user(umbc_email: str):
-    raise HTTPException(
-        status_code=503, detail="This endpoint is not yet implemented."
-    )
-    return {"message": f"dashboard endpoint for {umbc_email}"}
-
-
 @app.get("/api/report")
 async def api_report():
     curr_visa = app.state.current_visas
-    active_count = excel_parsing.get_total_live_cases(curr_visa)
-    expiring_count = len(excel_parsing.visas_to_renew(curr_visa))
-    case_type_totals = excel_parsing.get_case_type_totals(curr_visa)
     curr_visa_json = excel_parsing.get_employee_records(curr_visa)
     return {
         "status": "success",
-        "active": active_count,
-        "expiring": expiring_count,
-        "visa_types": {
-            "f1":case_type_totals[0],
-            "j1":case_type_totals[1],
-            "h1":case_type_totals[2],
-            "residency":case_type_totals[3],
-        },
         "entry_count": len(curr_visa_json),
         "entries": curr_visa_json
     }
+
+
+@app.get("/api/report/{umbc_email}")
+async def api_dashboard_user(umbc_email: str):
+    if app.state.excel is None or app.state.current_visas is None:
+        raise HTTPException(
+            status_code=500, detail="Visa data not initialized")
+    umbc_email = unquote(umbc_email)
+    all_visa = app.state.excel
+    current_visas = app.state.current_visas
+    personal_row = current_visas[current_visas["Employee's UMBC email"] == umbc_email]
+    if personal_row.empty:
+        personal_data = {}
+    else:
+        personal_data = excel_parsing.get_employee_records(personal_row)
+
+    gen_notes = excel_parsing.get_notes(umbc_email, all_visa)
+    pr_notes = excel_parsing.get_pr_notes(umbc_email, all_visa)
+    return {"individual_data": personal_data, "general_notes": gen_notes, "pr_notes": pr_notes}
 
 
 @app.post("/api/personal")
@@ -187,8 +188,8 @@ async def api_logout(request: Request, response: Response):
     for cookie_name in request.cookies.keys():
         response.delete_cookie(
             key=cookie_name,
-            path="/",            
-            domain=None,       
+            path="/",
+            domain=None,
             httponly=True,
             samesite="lax"
         )

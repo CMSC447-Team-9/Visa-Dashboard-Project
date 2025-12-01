@@ -29,6 +29,7 @@ export type EmployeeRecord = {
   annualSalary: number
   employeeEducationalLevel: string
   employeeEducationalField: string
+  college: string
 }
 
 export const RecordTypes: Record<keyof EmployeeRecord, "string" | "number" | "timestamp"> = {
@@ -60,4 +61,5 @@ export const RecordTypes: Record<keyof EmployeeRecord, "string" | "number" | "ti
   annualSalary: "number",
   employeeEducationalLevel: "string",
   employeeEducationalField: "string",
+  college: "string"
 }
