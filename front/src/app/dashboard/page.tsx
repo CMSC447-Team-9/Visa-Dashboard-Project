@@ -1,3 +1,8 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { DashboardData } from "@/types/DashboardData"
+import { DASHBOARD_PATH, TEST_PATH} from "@/types/API_Paths"
 import umbc_logo from '../../../public/umbc_shield.png'
 import Image from "next/image"
 import UpcomingCases from '@/components/UpcomingCases'
@@ -15,6 +20,24 @@ export default function Dashboard() {
     -Add export to csv option on reporting page
     -Add reload button on sidebar to manually reload data
     */
+
+    const [data, setData] = useState<DashboardData | null>(null)
+    
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await fetch(TEST_PATH)
+                if (!res.ok) throw new Error("Failed to fetch")
+                const json = await res.json()
+                setData(json)
+            } catch (err) {
+                console.error("Error fetching data:", err)
+            }
+        }
+
+        fetchData()
+    }, [])
+
 
     const backgroundClass: string = "rounded-xl border border-[#464647] bg-[#B6B7B9]"
     const inlineClass: string = "rounded-sm border"
@@ -41,7 +64,7 @@ export default function Dashboard() {
 
                             <div className={`flex w-full p-2 text-[35px] place-items-center`}>
                                 <p className="">Total Active Visas:&nbsp;</p>
-                                <p className="underline text-[#c03000] font-bold">5</p>
+                                <p className="underline text-[#c03000] font-bold">{data?.total_live}</p>
                             </div>
 
                         </div>

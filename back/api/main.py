@@ -84,6 +84,26 @@ async def api_upload( response: Response, file: UploadFile = File(...)):
         "columns": len(df.columns)
     }
 
+@app.get("/api/test")
+async def api_test():
+    if app.state.excel is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Visa data not loaded"
+        )
+    if app.state.current_visas is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Current visa data not processed"
+        )
+
+    curr_visa = app.state.excel
+
+    total_live_count = excel_parsing.get_total_live_cases(curr_visa)
+    return {
+
+        "total_live": total_live_count
+    }
 
 @app.get("/api/dashboard")
 async def api_dashboard():
