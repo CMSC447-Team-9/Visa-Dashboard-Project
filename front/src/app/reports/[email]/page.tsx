@@ -1,5 +1,5 @@
 import { INDIVIDUAL_PATH } from "@/types/API_Paths";
-import { EmployeeRecord } from "@/types/EmployeeRecord";
+import { EmployeeRecord, RecordTypes, ColumnLabels } from "@/types/EmployeeRecord";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -7,20 +7,20 @@ interface PageProps {
     params: Promise<{ email: string }>
 }
 
-interface DashboardResponse {
+interface IndividualData {
     "individual_data": EmployeeRecord[];
     "general_notes": string;
     "pr_notes": string;
 }
 
-const cardClass: string =
-    "rounded-xl border border-[#A6A7A9] bg-[#B6B7B9] shadow-[0_0_10px_5px_rgba(0,0,0,0.15)]";
+const cardClass: string = "rounded-xl border border-[#C8C9CB] bg-[#D8D9DB] shadow-[0_0_10px_5px_rgba(0,0,0,0.15)]"
+
 
 export default async function DashboardByEmail({ params }: PageProps) {
     const { email } = await params;
     const encodedEmail = encodeURIComponent(email);
 
-    let data: DashboardResponse;
+    let data: IndividualData;
     try {
         const res = await fetch(`${INDIVIDUAL_PATH}${encodedEmail}`);
         if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
@@ -80,13 +80,24 @@ export default async function DashboardByEmail({ params }: PageProps) {
                 <table className="table-auto w-full border-collapse">
                     <tbody>
                         {Object.entries(employee)
-                            .filter(([key]) => !["permanentResidencyNotes", "generalNotes", "prNotes"].includes(key))
-                            .map(([key, value]) => (
-                                <tr key={key} className="hover:bg-gray-100">
-                                    <td className="border px-2 py-1 font-semibold break-words">{key}</td>
-                                    <td className="border px-2 py-1 break-words">{value ? value.toString() : "N/A"}</td>
-                                </tr>
-                            ))}
+                            .filter(([key, value]) => !["permanentResidencyNotes", "generalNotes", "prNotes"].includes(key) && value && value !== "NaT" && key in ColumnLabels)
+                            .map(([key, value]) => {
+                                const label = ColumnLabels[key as keyof EmployeeRecord] ?? key;
+                                const type = RecordTypes[key as keyof EmployeeRecord];
+                                let displayValue: string;
+                                if (type === "timestamp" && value) {
+                                    const date = new Date(value as string | number);
+                                    displayValue = date.toLocaleDateString();
+                                } else {
+                                    displayValue = value?.toString() ?? "N/A";
+                                }
+                                return (
+                                    <tr key={key} className="hover:bg-gray-100">
+                                        <td className="border px-2 py-1 font-semibold break-words">{label}</td>
+                                        <td className="border px-2 py-1 break-words">{displayValue}</td>
+                                    </tr>
+                                );
+                            })}
                     </tbody>
                 </table>
             </div>
