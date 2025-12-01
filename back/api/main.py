@@ -131,7 +131,7 @@ async def api_dashboard():
     curr_visa = app.state.current_visas
     all_visa = app.state.excel
     f1_count, j1_count, h1b_count, pr_count = excel_parsing.get_case_type_totals(
-        curr_visa)
+        all_visa)
     total_live_count = excel_parsing.get_total_live_cases(curr_visa)
     renew_visas = excel_parsing.visas_to_renew(curr_visa)
     pending_visas = excel_parsing.pending_visas(all_visa)

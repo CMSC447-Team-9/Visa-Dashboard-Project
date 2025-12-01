@@ -1,15 +1,18 @@
-import { Timestamp } from "next/dist/server/lib/cache-handlers/types"
-
-export type RenewData = {
-    "Last name": string;
-    "First name": string;
-    "Case type": string;
-    "Expiration date": Timestamp;
+export type VisaData = {
+    "last_name": string;
+    "first_name": string;
+    "case_type": string;
+    "expiration_date": string;
 }
 
 export type DashboardData = {
-
-    total_live: number
-    renew_visas: RenewData[]
-
-}
+        "case_data": {
+            "total_F-1": number,
+            "total_J-1": number,
+            "total_H-1B": number,
+            "total_Residency": number,
+            "total_live": number,
+        },
+        "renew_visas": VisaData[],
+        "pending_visas": VisaData[]
+    }
