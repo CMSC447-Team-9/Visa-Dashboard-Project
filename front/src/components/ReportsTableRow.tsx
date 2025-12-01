@@ -3,19 +3,17 @@
 import { useRouter } from "next/navigation";
 import { EmployeeRecord } from "@/types/EmployeeRecord";
 
-export default function ReportsTableRow({ row, columnKeys }: { row: EmployeeRecord, columnKeys: (keyof EmployeeRecord)[] }) {
+export default function ReportsTableRow({ row, columnKeys, index }: { row: EmployeeRecord, columnKeys: (keyof EmployeeRecord)[], index: number }) {
     const router = useRouter();
-
     return (
-        <tr onClick={() => router.push(`/reports/${row.employeeUmbcEmail}`)} className="border-t hover:bg-gray-100 cursor-pointer select-none">
-            {columnKeys.map(column => (
-                <td key={column} className="border px-2 py-2 text-center break-words">
-                    {formatCell(column, row[column])}
-                </td>
-            ))}
+        <tr onClick={() => router.push(`/reports/${row.employeeUmbcEmail}`)} className={`${index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"} cursor-pointer hover:bg-gray-300 transition`}>
+            {columnKeys.map(col =>
+                 <td key={col} className="px-3 py-2 text-center break-words text-[15px]">{formatCell(col, row[col])}
+                 </td>)}
         </tr>
-    );
+    )
 }
+
 
 
 const formatCell = (column: keyof EmployeeRecord, value: string | number) => {

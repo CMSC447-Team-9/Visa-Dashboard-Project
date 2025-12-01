@@ -31,8 +31,6 @@ export default async function Dashboard() {
     const caseData = data.case_data
     const totalActive: number = caseData.total_live
 
-    const inlineClass: string = "rounded-sm border"
-
     return (
         <div className="flex flex-col w-full h-full gap-4">
             {/* top row */}
@@ -54,26 +52,26 @@ export default async function Dashboard() {
                     </div>
 
                     {/* bottom left row */}
-                    <div className={`${cardClass} flex flex-col p-3 gap-2 grow place-items-center`}>
-                        <div className={`${inlineClass} flex grow w-full place-items-center border`}>
-                            {UpcomingCasesTable(data?.renew_visas)}
+                    <div className={`${cardClass} p-3 grow`}>
+                        <div className={`flex flex-col grow w-full items-center`}>
+                            <UpcomingCasesTable visas={renewableVisas} />
                         </div>
                     </div>
                 </div>
 
                 {/* top right side */}
                 <div className={`${cardClass} p-4 w-3/10 content-center text-center`}>
-                    {CaseNumbers()}
+                    <CaseNumbers data={caseData} />
                 </div>
             </div>
 
             {/* bottom row */}
             <div className="flex flex-row gap-4 h-3/8">
-                <div className={`${cardClass} p-4 w-7/10 content-center text-center`}>
-                    {CasesPerYear()}
+                <div className={`${cardClass} p-4 w-7/10 text-center`}>
+                    <CasesPerYear visas={renewableVisas} />
                 </div>
                 <div className={`${cardClass} p-4 w-3/10 content-center text-center`}>
-                    {IndividualFocus()}
+                    <IndividualFocus visa={pendingVisas?.[0]} />
                 </div>
             </div>
         </div>

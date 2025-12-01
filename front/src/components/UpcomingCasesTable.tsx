@@ -1,47 +1,35 @@
-import { RenewData } from "@/types/DashboardData"
+// /components/UpcomingCasesTable.tsx
+import { VisaData } from "@/types/DashboardData"
 
-export default function UpcomingCasesTable(renew_visas : RenewData[] | undefined){
+const thClass = "px-3 py-3 font-semibold cursor-pointer select-none hover:bg-gray-100"
+const tdClass = "px-3 py-2 text-center break-words text-[15px]"
 
-    if (!renew_visas){
-        renew_visas = [{"Last name": "Test", "First name": "Test", "Case type": "Test", "Expiration date": -1}]
-    }
+export default function UpcomingCasesTable({ visas }: { visas?: VisaData[] }) {
+    if (!visas || visas.length === 0)
+        return <p className="text-center text-gray-500 p-4">No upcoming renewals</p>
 
-    const ColumnLabels = {
+    return (
+        <>
+            <h2 className="text-2xl underline mb-2">Upcoming Cases</h2>
 
-        lastName: "Last Name"
-
-    }
-
-    return(
-
-        <div>
-            <p>Upcoming Cases <br/> {renew_visas[0]["Last name"]}, {renew_visas[0]["First name"]}, {renew_visas[0]["Case type"]}, {renew_visas[0]["Expiration date"]}</p>
-
-            <table>
+            <table className="w-full table-fixed border-collapse text-sm rounded-xl overflow-hidden shadow-md">
                 <thead>
-                    <tr>
-                        <th scope="col" className="px-8"> Last Name </th>
-                        <th scope="col" className="px-8"> First Name </th>
-                        <th scope="col" className="px-8"> Case Type </th>
-                        <th scope="col" className="px-8"> Expiration Date </th>
+                    <tr className="bg-gray-200 border-b">
+                        <th className={thClass}>Name</th>
+                        <th className={thClass}>Case Type</th>
+                        <th className={thClass}>Expiration</th>
                     </tr>
                 </thead>
-
-                <tbody>
-
-                    <tr>
-                        
-                        <th scope="row"> Sniv </th>
-                        <td className="text-center border px-2"> Vinny </td>
-                        <td className="text-center border px-2"> {renew_visas[0]["Case type"]} </td>
-                        <td className="text-center border px-2"> 1015-12-31 </td>
-                        
-                    </tr>
-
+                <tbody className="divide-y divide-gray-400">
+                    {visas.map((v, i) => (
+                        <tr key={i} className={`${i % 2 === 0 ? "bg-gray-100" : "bg-gray-200"} cursor-pointer hover:bg-gray-300 transition`}>
+                            <td className={tdClass}>{v.last_name}, {v.first_name}</td>
+                            <td className={tdClass}>{v.case_type}</td>
+                            <td className={tdClass}>{v.expiration_date}</td>
+                        </tr>
+                    ))}
                 </tbody>
-
             </table>
-        </div>
+        </>
     )
-
 }
