@@ -25,6 +25,7 @@ services:
       - /app/node_modules   
     environment:
       NODE_ENV: development
+      BACKEND: http://back:8000
     depends_on:
       - back
     restart: unless-stopped

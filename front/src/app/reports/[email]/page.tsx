@@ -14,7 +14,6 @@ interface IndividualData {
 
 const cardClass: string = "rounded-xl border border-[#C8C9CB] bg-[#D8D9DB] shadow-[0_0_10px_5px_rgba(0,0,0,0.15)]"
 
-
 export default async function ReportByEmail({ params }: PageProps) {
     const { email } = await params;
     const encodedEmail = encodeURIComponent(email);
@@ -42,7 +41,7 @@ export default async function ReportByEmail({ params }: PageProps) {
                 <div className={`${cardClass} flex flex-col h-full w-full p-4 gap-2`}>
                     {/* Back Button + Title */}
                     <div className="flex items-center gap-2 my-4 w-full">
-                        <IndividualBackButton/>
+                        <IndividualBackButton />
                         <h1 className="text-2xl font-bold ml-2">{employee.firstName} {employee.lastName}</h1>
                     </div>
 
@@ -74,14 +73,15 @@ export default async function ReportByEmail({ params }: PageProps) {
 
             {/* Right: Scrollable Table (1/4 width) */}
             <div className={`flex-grow overflow-auto max-h-screen border rounded p-2 min-w-0 ${cardClass}`}>
-                <table className="table-auto w-full border-collapse">
-                    <tbody>
+                <table className="table-auto w-full p-2 border-collapse text-sm rounded-xl overflow-hidden shadow-md">
+                    <tbody className="divide-y divide-gray-400">
                         {Object.entries(employee)
                             .filter(([key, value]) => !["permanentResidencyNotes", "generalNotes", "prNotes"].includes(key) && value && value !== "NaT" && key in ColumnLabels)
-                            .map(([key, value]) => {
+                            .map(([key, value], i) => {
                                 const label = ColumnLabels[key as keyof EmployeeRecord] ?? key;
                                 const type = RecordTypes[key as keyof EmployeeRecord];
                                 let displayValue: string;
+
                                 if (type === "timestamp" && value) {
                                     const date = new Date(value as string | number);
                                     displayValue = date.toLocaleDateString();
@@ -89,9 +89,9 @@ export default async function ReportByEmail({ params }: PageProps) {
                                     displayValue = value?.toString() ?? "N/A";
                                 }
                                 return (
-                                    <tr key={key} className="hover:bg-gray-100">
-                                        <td className="border px-2 py-1 font-semibold break-words">{label}</td>
-                                        <td className="border px-2 py-1 break-words">{displayValue}</td>
+                                    <tr key={key} className={`${i % 2 === 0 ? "bg-gray-100" : "bg-gray-200"} hover:bg-gray-300 transition`}>
+                                        <td className="px-3 py-2 text-start font-semibold break-words text-[15px]">{label}</td>
+                                        <td className="px-3 py-2 text-start break-words text-[15px]">{displayValue}</td>
                                     </tr>
                                 );
                             })}

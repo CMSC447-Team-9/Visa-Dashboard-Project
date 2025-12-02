@@ -6,7 +6,7 @@ import UpcomingCasesTable from '@/components/DashboardUpcomingCasesTable'
 import CaseNumbers from '@/components/DashboardCaseNumbers'
 import IndividualFocus from '@/components/DashboardIndividualFocus'
 import CasesPerYear from '@/components/DashboardCasesPerYear'
-import PendingCasesTable from "@/components/PendingCasesTable"
+import PendingCasesTable from "@/components/DashboardPendingCasesTable"
 
 const cardClass: string = "rounded-xl border border-[#C8C9CB] bg-[#D8D9DB] shadow-[0_0_10px_5px_rgba(0,0,0,0.15)]"
 
@@ -20,12 +20,12 @@ const cardClass: string = "rounded-xl border border-[#C8C9CB] bg-[#D8D9DB] shado
 export default async function Dashboard() {
     let data: DashboardData;
     try {
-        const res = await fetch(`${DASHBOARD_PATH}`);
+        const res = await fetch(`${DASHBOARD_PATH}`, { cache: 'no-store' });
         if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
         data = await res.json();
     } catch (err) {
         console.error(err);
-        return <div><h1>Could not fetch data</h1></div>;
+        return <div><h1>Could not fetch data from {DASHBOARD_PATH}</h1></div>;
     }
     const renewableVisas: VisaData[] = data.renew_visas
     const pendingVisas: VisaData[] = data.pending_visas
@@ -34,7 +34,7 @@ export default async function Dashboard() {
     const stats: Stats = data.stats
 
     return (
-        <div className="flex flex-col w-full h-full gap-4">
+        <div className="flex flex-col w-full space-y-4 text-center">
             {/* top row */}
             <div className="flex flex-row gap-4 flex-1 w-full h-4/13">
                 {/* left side */}
@@ -82,6 +82,7 @@ export default async function Dashboard() {
                 </div>
             </div>
         </div>
-
     )
+
+
 }

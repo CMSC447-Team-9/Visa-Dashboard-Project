@@ -22,6 +22,7 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: production
+      BACKEND: http://back:8000
     depends_on:
       - back
     restart: unless-stopped
