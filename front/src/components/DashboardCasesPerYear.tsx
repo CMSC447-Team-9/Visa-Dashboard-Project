@@ -12,7 +12,7 @@ export default function CasesPerYear({ stats }: { stats: Stats }) {
 
     return (
         <div className="flex flex-col gap-2">
-            <h2 className="text-xl underline mb-2 font-semibold">Cases This Year</h2>
+            <h2 className="text-2xl underline mb-2">Cases This Year</h2>
             <table className="min-w-0 w-full table-fixed border-collapse text-sm rounded-xl overflow-hidden shadow-md">
                 <thead>
                     <tr className="bg-gray-200 border-b">

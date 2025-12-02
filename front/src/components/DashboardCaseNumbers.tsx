@@ -16,7 +16,7 @@ export default function CaseNumbers({ data }: { data: DashboardData["case_data"]
 
     return (
         <div className="flex flex-col gap-2">
-            <h2 className="text-xl underline mb-2 font-semibold">Total Case Types</h2>
+            <h2 className="text-2xl underline mb-2">Total Case Types</h2>
             <table className="min-w-0 w-full table-fixed border-collapse text-sm rounded-xl overflow-hidden shadow-md">
                 <thead>
                     <tr className="bg-gray-200 border-b">
