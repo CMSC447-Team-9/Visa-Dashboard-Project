@@ -40,8 +40,8 @@ export default async function Dashboard() {
                 {/* left side */}
                 <div className="flex flex-1 flex-col w-7/10 h-full gap-4">
                     {/* top left row */}
-                    <div className="flex flex-1 flex-row gap-4 h-2/12">
-                        <div className={`flex w-4/10 h-full p-2 place-items-center @container`}>
+                    <div className="flex flex-1 h-full flex-row gap-4">
+                        <div className={`flex w-4/10 p-2 place-items-center @container`}>
                             <Image src={umbc_logo} alt='UMBC Shield Graphic' width={55} height={55} />
                             <h1 className='pl-5 text-[39px]'>Dashboard Page</h1>
                         </div>
@@ -54,8 +54,8 @@ export default async function Dashboard() {
                     </div>
 
                     {/* bottom left row */}
-                    <div className={`${cardClass} flex flex-1 w-full p-3 text-center h-9/12`}>
-                        <div className={`flex flex-col w-full h-full`}>
+                    <div className={`${cardClass} flex flex-1 w-full p-3 text-center`}>
+                        <div className={`flex flex-col w-full h-65`}>
                             <UpcomingCasesTable visas={renewableVisas} />
                         </div>
                     </div>

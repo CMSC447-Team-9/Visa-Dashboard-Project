@@ -11,7 +11,7 @@ export default function UpcomingCasesTable({ visas }: { visas?: VisaData[] }) {
         <>
             <h2 className="text-2xl underline mb-2">Upcoming Cases</h2>
 
-            <div className="flex h-full overflow-y-auto">
+            <div className="flex h-auto overflow-y-auto">
                 <table className="w-full table-fixed border-collapse text-sm rounded-xl overflow-hidden shadow-md">
                     <thead>
                         <tr className="bg-gray-200 border-b">

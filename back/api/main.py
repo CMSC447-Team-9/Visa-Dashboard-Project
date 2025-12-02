@@ -107,16 +107,6 @@ async def api_dashboard():
     pending_visas = excel_parsing.pending_visas(all_visa)
     stats = excel_parsing.get_period_stats(curr_visa)
 
-    for i in range(10):
-        new = {"last_name": "Stokes",
-                "first_name": "Colin",
-                "case_type": "H1-B",
-                "expiration_date": "2025-04-04",
-                "umbc_email": "cstokes3@umbc.edu"}
-        
-        renew_visas.append(new)
-
-
     return {
         "case_data": {
             "total_F-1": f1_count,
