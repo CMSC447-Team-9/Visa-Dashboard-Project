@@ -36,16 +36,16 @@ export default async function Dashboard() {
     return (
         <div className="flex flex-col w-full h-full gap-4">
             {/* top row */}
-            <div className="flex flex-row gap-4 flex-1">
+            <div className="flex flex-row gap-4 flex-1 w-full h-4/13">
                 {/* left side */}
-                <div className="flex flex-col gap-4 w-7/10">
+                <div className="flex flex-1 flex-col w-7/10 h-full gap-4">
                     {/* top left row */}
-                    <div className="flex flex-row gap-4">
-                        <div className={`flex w-4/10 p-2 place-items-center @container`}>
+                    <div className="flex flex-1 flex-row gap-4 h-2/12">
+                        <div className={`flex w-4/10 h-full p-2 place-items-center @container`}>
                             <Image src={umbc_logo} alt='UMBC Shield Graphic' width={55} height={55} />
                             <h1 className='pl-5 text-[39px]'>Dashboard Page</h1>
                         </div>
-                        <div className={`${cardClass} flex flex-col w-6/10 p-3 gap-2 place-items-center`}>
+                        <div className={`${cardClass} flex flex-col w-6/10 h-full p-2 gap-2 place-items-center items-center`}>
                             <div className={`flex w-full p-2 text-[35px] place-items-center`}>
                                 <p className="">Total Active Visas:&nbsp;</p>
                                 <p className="underline text-[#c03000] font-bold">{totalActive}</p>
@@ -54,27 +54,31 @@ export default async function Dashboard() {
                     </div>
 
                     {/* bottom left row */}
-                    <div className={`${cardClass} p-3 grow`}>
-                        <div className={`flex flex-col grow w-full items-center`}>
+                    <div className={`${cardClass} flex flex-1 w-full p-3 text-center h-9/12`}>
+                        <div className={`flex flex-col w-full h-full`}>
                             <UpcomingCasesTable visas={renewableVisas} />
                         </div>
                     </div>
                 </div>
 
                 {/* top right side */}
-                <div className={`${cardClass} p-3 text-center flex-1`}>
-                    <IndividualFocus visas={renewableVisas} />
+                <div className={`gap-4 text-center flex flex-col w-3/10 justify-around`}>
+                    <div className={`${cardClass} py-3`}>
+                        <IndividualFocus visas={renewableVisas} />
+                    </div>
+                    <div className={`${cardClass} p-3 gap-4 overflow-y-auto`}>
+                        <CasesPerYear stats={stats} />
+                    </div>
                 </div>
             </div>
 
             {/* bottom row */}
-            <div className="flex flex-row gap-4">
-                <div className={`${cardClass} p-4 text-center flex-1`}>
+            <div className="flex flex-row gap-4 w-full h-6/13">
+                <div className={`${cardClass} flex p-4 text-center flex-1 w-7/10 h-full`}>
                     <PendingCasesTable visas={pendingVisas} />
                 </div>
-                <div className={`${cardClass} flex flex-col gap-4 p-4 w-3/10 text-center justify-between`}>
+                <div className={`${cardClass} flex flex-col gap-4 p-3 w-3/10 text-center justify-center h-full overflow-y-auto`}>
                     <CaseNumbers data={caseData} />
-                    <CasesPerYear stats={stats} />
                 </div>
             </div>
         </div>

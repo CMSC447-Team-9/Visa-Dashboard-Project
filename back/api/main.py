@@ -85,36 +85,6 @@ async def api_upload(response: Response, file: UploadFile = File(...)):
         "columns": len(df.columns)
     }
 
-@app.get("/api/test")
-async def api_test():
-    if app.state.excel is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Visa data not loaded"
-        )
-    if app.state.current_visas is None:
-        raise HTTPException(
-            status_code=503,
-            detail="Current visa data not processed"
-        )
-
-    excel_sheet = app.state.excel
-    curr_visas = app.state.current_visas
-
-    total_renew = excel_parsing.visas_to_renew(curr_visas) #list of dictionaies with all people
-
-    i = 0
-    for employee_data in total_renew:
-        print(i)
-        i += 1
-
-    total_live_count = excel_parsing.get_total_live_cases(excel_sheet)
-    return {
-
-        "total_live": total_live_count,
-        "renew_visas": total_renew
-    }
-
 @app.get("/api/dashboard")
 async def api_dashboard():
     if app.state.excel is None:
@@ -136,6 +106,16 @@ async def api_dashboard():
     renew_visas = excel_parsing.visas_to_renew(curr_visa)
     pending_visas = excel_parsing.pending_visas(all_visa)
     stats = excel_parsing.get_period_stats(curr_visa)
+
+    for i in range(10):
+        new = {"last_name": "Stokes",
+                "first_name": "Colin",
+                "case_type": "H1-B",
+                "expiration_date": "2025-04-04",
+                "umbc_email": "cstokes3@umbc.edu"}
+        
+        renew_visas.append(new)
+
 
     return {
         "case_data": {

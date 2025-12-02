@@ -10,24 +10,27 @@ export default function UpcomingCasesTable({ visas }: { visas?: VisaData[] }) {
     return (
         <>
             <h2 className="text-2xl underline mb-2">Upcoming Cases</h2>
-            <table className="w-full table-fixed border-collapse text-sm rounded-xl overflow-hidden shadow-md">
-                <thead>
-                    <tr className="bg-gray-200 border-b">
-                        <th className={thClass}>Name</th>
-                        <th className={thClass}>Case Type</th>
-                        <th className={thClass}>Expiration</th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-400">
-                    {visas.map((v, i) => (
-                        <tr key={i} className={`${i % 2 === 0 ? "bg-gray-100" : "bg-gray-200"} hover:bg-gray-300 transition`}>
-                            <td className={tdClass}>{v.first_name} {v.last_name}</td>
-                            <td className={tdClass}>{v.case_type}</td>
-                            <td className={tdClass}>{v.expiration_date}</td>
+
+            <div className="flex h-full overflow-y-auto">
+                <table className="w-full table-fixed border-collapse text-sm rounded-xl overflow-hidden shadow-md">
+                    <thead>
+                        <tr className="bg-gray-200 border-b">
+                            <th className={thClass}>Name</th>
+                            <th className={thClass}>Case Type</th>
+                            <th className={thClass}>Expiration</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody className="divide-y divide-gray-400">
+                        {visas.map((v, i) => (
+                            <tr key={i} className={`${i % 2 === 0 ? "bg-gray-100" : "bg-gray-200"} hover:bg-gray-300 transition`}>
+                                <td className={tdClass}>{v.first_name} {v.last_name}</td>
+                                <td className={tdClass}>{v.case_type}</td>
+                                <td className={tdClass}>{v.expiration_date}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </>
     )
 }
