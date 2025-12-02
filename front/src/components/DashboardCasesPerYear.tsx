@@ -1,5 +1,5 @@
 import { Stats } from "@/types/DashboardData"
-const thClass = "px-3 py-3 font-semibold select-none hover:bg-gray-100"
+const thClass = "px-3 py-3 font-semibold select-none"
 const tdClass = "px-3 py-2 text-center break-words text-[15px]"
 
 export default function CasesPerYear({ stats }: { stats: Stats }) {
@@ -15,7 +15,7 @@ export default function CasesPerYear({ stats }: { stats: Stats }) {
             <h2 className="text-2xl underline mb-2">Cases This Year</h2>
             <table className="min-w-0 w-full table-fixed border-collapse text-sm rounded-xl overflow-hidden shadow-md">
                 <thead>
-                    <tr className="bg-gray-200 border-b">
+                    <tr className="bg-gray-400 border-b">
                         <th className={thClass}>Visa Type</th>
                         <th className={thClass}>Calendar Year</th>
                         <th className={thClass}>Reporting Year</th>
@@ -24,7 +24,7 @@ export default function CasesPerYear({ stats }: { stats: Stats }) {
                 </thead>
                 <tbody className="divide-y divide-gray-400">
                     {rows.map((row, i) => (
-                        <tr key={i} className={`${i % 2 === 0 ? "bg-gray-100" : "bg-gray-200"} hover:bg-gray-300 transition`}>
+                        <tr key={i} className={`${i % 2 === 0 ? "bg-gray-100" : "bg-gray-200"}`}>
                             <td className={`${tdClass} font-semibold`}>{row.type}</td>
                             <td className={tdClass}>{row.calendar}</td>
                             <td className={tdClass}>{row.reporting}</td>
