@@ -63,7 +63,7 @@ export default function ReportsFilter({ filterOptions, filterBy, updateFilter, c
                             <label className="font-semibold mb-1 w-1/4">{columnLabels[key] ?? key}:</label>
                             <div className="relative flex-1">
                                 {/* This is the selection/display for the filter */}
-                                <button ref={el => { buttonRefs.current[key as string] = el }} className="border p-2 rounded text-left w-full bg-gray-200" onClick={() => handleClick(key)}>
+                                <button ref={el => { buttonRefs.current[key as string] = el }} className="border p-2 rounded text-left w-full bg-gray-200 hover:bg-gray-300" onClick={() => handleClick(key)}>
                                     {(() => {
                                         if (!selected) return "Select..."
                                         const fieldType = RecordTypes[key]
