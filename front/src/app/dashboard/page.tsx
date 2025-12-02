@@ -6,7 +6,7 @@ import UpcomingCasesTable from '@/components/DashboardUpcomingCasesTable'
 import CaseNumbers from '@/components/DashboardCaseNumbers'
 import IndividualFocus from '@/components/DashboardIndividualFocus'
 import CasesPerYear from '@/components/DashboardCasesPerYear'
-import PendingCasesTable from "@/components/PendingCasesTable"
+import PendingCasesTable from "@/components/DashboardPendingCasesTable"
 
 const cardClass: string = "rounded-xl border border-[#C8C9CB] bg-[#D8D9DB] shadow-[0_0_10px_5px_rgba(0,0,0,0.15)]"
 
@@ -20,7 +20,6 @@ const cardClass: string = "rounded-xl border border-[#C8C9CB] bg-[#D8D9DB] shado
 export default async function Dashboard() {
     let data: DashboardData;
     try {
-        console.log(`Dashboard Path: ${DASHBOARD_PATH}`)
         const res = await fetch(`${DASHBOARD_PATH}`, { cache: 'no-store' });
         if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
         data = await res.json();
@@ -35,50 +34,53 @@ export default async function Dashboard() {
     const stats: Stats = data.stats
 
     return (
-        <div className="flex flex-col w-full h-full gap-4">
+        <div className="flex flex-col w-full space-y-4 text-center">
             {/* top row */}
-            <div className="flex flex-row gap-4 flex-1">
+            <div className="flex flex-row flex-1 min-h-0 space-x-4">
                 {/* left side */}
-                <div className="flex flex-col gap-4 w-7/10">
+                <div className="flex flex-col w-7/10 min-h-0 space-y-4">
                     {/* top left row */}
-                    <div className="flex flex-row gap-4">
-                        <div className={`flex w-4/10 p-2 place-items-center @container`}>
-                            <Image src={umbc_logo} alt='UMBC Shield Graphic' width={55} height={55} />
-                            <h1 className='pl-5 text-[39px]'>Dashboard Page</h1>
+                    <div className="flex flex-row space-x-4">
+                        <div className="flex w-4/10 p-2 items-center">
+                            <Image src={umbc_logo} alt="UMBC Shield Graphic" className="w-6 md:w-8 lg:w-10 h-auto" />
+                            <h2 className="text-2xl ml-2">Dashboard</h2>
                         </div>
-                        <div className={`${cardClass} flex flex-col w-6/10 p-3 gap-2 place-items-center`}>
-                            <div className={`flex w-full p-2 text-[35px] place-items-center`}>
-                                <p className="">Total Active Visas:&nbsp;</p>
+                        <div className={`${cardClass} flex flex-col w-6/10 p-3 gap-2 items-center`}>
+                            <div className="flex w-full p-2 text-2xl justify-center items-center">
+                                <p>Total Active Visas:&nbsp;</p>
                                 <p className="underline text-[#c03000] font-bold">{totalActive}</p>
                             </div>
                         </div>
                     </div>
 
                     {/* bottom left row */}
-                    <div className={`${cardClass} p-3 grow`}>
-                        <div className={`flex flex-col grow w-full items-center`}>
+                    <div className={`${cardClass} flex-1 min-h-0 p-3`}>
+                        <div className="flex flex-col w-full h-full overflow-y-auto">
                             <UpcomingCasesTable visas={renewableVisas} />
                         </div>
                     </div>
                 </div>
 
                 {/* top right side */}
-                <div className={`${cardClass} p-3 text-center flex-1`}>
-                    <IndividualFocus visas={renewableVisas} />
+                <div className={`${cardClass} flex-1 min-h-0 p-3`}>
+                    <div className="h-full overflow-y-auto">
+                        <IndividualFocus visas={renewableVisas} />
+                    </div>
                 </div>
             </div>
 
             {/* bottom row */}
-            <div className="flex flex-row gap-4">
-                <div className={`${cardClass} p-4 text-center flex-1`}>
+            <div className="flex flex-row flex-1 min-h-0 space-x-4">
+                <div className={`${cardClass} flex-1 min-h-0 flex flex-col p-4 overflow-y-auto`}>
                     <PendingCasesTable visas={pendingVisas} />
                 </div>
-                <div className={`${cardClass} flex flex-col gap-4 p-4 w-3/10 text-center justify-between`}>
+                <div className={`${cardClass} flex flex-col gap-2 p-4 w-3/8 min-h-0 justify-between overflow-y-auto`}>
                     <CaseNumbers data={caseData} />
                     <CasesPerYear stats={stats} />
                 </div>
             </div>
         </div>
-
     )
+
+
 }

@@ -13,7 +13,7 @@ export default function IndividualFocus({ visas }: { visas?: VisaData[] }) {
 
     return (
         <div className="flex flex-col gap-3 text-left">
-            <h2 className="text-2xl underline mb-2 text-center">Next Expiration</h2>
+            <h2 className="text-xl underline mb-2 text-center font-semibold">Next Expiration</h2>
 
             <p><b>Name:</b> {nextExpiring.first_name} {nextExpiring.last_name}</p>
             <p><b>Case Type:</b> {nextExpiring.case_type}</p>

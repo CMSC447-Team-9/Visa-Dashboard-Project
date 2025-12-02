@@ -1,4 +1,4 @@
-export const BACKEND = process.env.BACKEND || "http://back:8000"
+export const BACKEND = process.env.BACKEND || "http://localhost:8000"
 export const NEXT_PUBLIC_BACKEND = process.env.NEXT_PUBLIC_BACKEND || "http://localhost:8000"
 export const UPLOAD_PATH: string = `${NEXT_PUBLIC_BACKEND}/api/upload`
 export const REPORTS_PATH: string = `${NEXT_PUBLIC_BACKEND}/api/report`

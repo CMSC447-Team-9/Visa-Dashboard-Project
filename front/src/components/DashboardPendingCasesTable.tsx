@@ -10,7 +10,7 @@ export default function PendingCasesTable({ visas }: { visas?: VisaData[] }) {
 
     return (
         <>
-            <h2 className="text-2xl underline mb-2">Pending Cases</h2>
+            <h2 className="text-xl underline mb-2 font-semibold">Pending Cases</h2>
 
             <table className="w-full table-fixed border-collapse text-sm rounded-xl overflow-hidden shadow-md">
                 <thead>
