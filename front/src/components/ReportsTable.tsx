@@ -74,7 +74,7 @@ export default function ReportsTable({ data, sortedBy, filterBy, setSort }: Repo
 
             <table className="w-full table-fixed border-collapse text-sm rounded-xl overflow-hidden shadow-md">
                 <thead>
-                    <tr className="bg-gray-200 border-b shadow-sm">
+                    <tr className="bg-gray-400 border-b shadow-sm">
                         {columnKeys.map(key =>
                             <th key={key} onClick={() => setSort(key)} className="px-3 py-3 font-semibold cursor-pointer select-none hover:bg-gray-100">
                                 {columnLabels[key]} {sortedBy.key === key && <span>{sortedBy.direction === "asc" ? "↑" : "↓"}
