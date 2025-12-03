@@ -174,4 +174,6 @@ async def api_logout(request: Request, response: Response):
             httponly=True,
             samesite="lax"
         )
+    app.state.excel = None
+    app.state.current_visas = None
     return {"message": "Logged out"}
