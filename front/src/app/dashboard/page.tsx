@@ -38,35 +38,35 @@ export default async function Dashboard() {
             {/* top row */}
             <div className="flex flex-row gap-4 flex-1 w-full h-4/13">
                 {/* left side */}
-                <div className="flex flex-1 flex-col w-7/10 h-full gap-4">
+                <div className="flex flex-col w-5/8 h-full gap-4">
                     {/* top left row */}
-                    <div className="flex flex-1 h-full flex-row gap-4">
-                        <div className={`flex w-4/10 p-2 place-items-center @container`}>
-                            <Image src={umbc_logo} alt='UMBC Shield Graphic' width={55} height={55} />
-                            <h1 className='pl-5 text-[39px]'>Dashboard Page</h1>
+                    <div className="flex flex-row space-x-4">
+                        <div className="flex w-4/10 p-2 items-center">
+                            <Image src={umbc_logo} alt="UMBC Shield Graphic" className="w-6 md:w-8 lg:w-10 h-auto" />
+                            <h2 className="text-2xl ml-2">Dashboard</h2>
                         </div>
-                        <div className={`${cardClass} flex flex-col w-6/10 h-full p-2 gap-2 place-items-center items-center`}>
-                            <div className={`flex w-full p-2 text-[35px] place-items-center`}>
-                                <p className="">Total Active Visas:&nbsp;</p>
+                        <div className={`${cardClass} flex flex-col w-6/10 p-3 gap-2 items-center`}>
+                            <div className="flex w-full p-2 text-2xl justify-center items-center">
+                                <p>Total Active Visas:&nbsp;</p>
                                 <p className="underline text-[#c03000] font-bold">{totalActive}</p>
                             </div>
                         </div>
                     </div>
 
                     {/* bottom left row */}
-                    <div className={`${cardClass} flex flex-1 w-full p-3 text-center`}>
-                        <div className={`flex flex-col w-full h-65`}>
+                    <div className={`${cardClass} flex-1 min-h-0 p-3`}>
+                        <div className="flex flex-col w-full h-full overflow-y-auto">
                             <UpcomingCasesTable visas={renewableVisas} />
                         </div>
                     </div>
                 </div>
 
                 {/* top right side */}
-                <div className={`gap-4 text-center flex flex-col w-3/10 justify-around`}>
+                <div className={`gap-4 text-center flex flex-col flex-1 justify-around`}>
                     <div className={`${cardClass} py-3`}>
                         <IndividualFocus visas={renewableVisas} />
                     </div>
-                    <div className={`${cardClass} p-3 gap-4 overflow-y-auto`}>
+                    <div className={`${cardClass} p-3 gap-4 overflow-y-auto flex-1 items-start`}>
                         <CasesPerYear stats={stats} />
                     </div>
                 </div>
@@ -74,10 +74,10 @@ export default async function Dashboard() {
 
             {/* bottom row */}
             <div className="flex flex-row gap-4 w-full h-6/13">
-                <div className={`${cardClass} flex p-4 text-center flex-1 w-7/10 h-full`}>
+                <div className={`${cardClass} flex p-4 text-center w-5/8 h-full`}>
                     <PendingCasesTable visas={pendingVisas} />
                 </div>
-                <div className={`${cardClass} flex flex-col gap-4 p-3 w-3/10 text-center justify-center h-full overflow-y-auto`}>
+                <div className={`${cardClass} flex flex-col flex-1 gap-4 p-3 text-center justify h-full overflow-y-auto`}>
                     <CaseNumbers data={caseData} />
                 </div>
             </div>
